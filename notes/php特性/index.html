@@ -1,0 +1,3463 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
+      
+      
+        <link rel="next" href="../%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Php特性 - Lengkur's Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#php" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-header__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lengkur's Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Php特性
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🐧 Lengkur's Cyber Space
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%2A/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  *
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Notes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wp/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Wp
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Lengkur&#39;s Wiki" class="md-nav__button md-logo" aria-label="Lengkur's Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Lengkur's Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🐧 Lengkur's Cyber Space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%2A/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    *
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SQL%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SSRF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSRF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SSTI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSTI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Struct2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XSS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../http/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Http
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php命令执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php特性
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php特性
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#php" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PHP变量解析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        超全局变量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        正则匹配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="正则匹配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcre-preg_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCRE机制：用于正则表达式匹配操作 基本覆盖preg_*函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        编码解码函数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字符串
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        强比较和弱比较
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET和POST
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数组
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对象操作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        类
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hash
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运算符优先级
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件上传
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wp
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS 工坊web基础入门
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS 工坊web基础入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%20%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/P7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSSCTF WEB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSSCTF WEB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [De1ctf 2019]SSRF Me Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BMoeCTF%202021%5DbabyRCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [MoeCTF 2021]babyRCE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]bingdundun~ phar文件上传 phar伪协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dlevel-up~robots-md5%E5%BC%BA%E7%A2%B0%E6%92%9E-sha1%E5%BC%BA%E7%A2%B0%E6%92%9E-php%E5%8F%98%E9%87%8F%E8%A7%A3%E6%9E%90%E7%BB%95%E8%BF%87-create_function%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [NISACTF 2022]level up~robots md5强碰撞 sha1强碰撞 php变量解析绕过 create function绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BSWPUCTF%202022%20%E6%96%B0%E7%94%9F%E8%B5%9B%5Dez_sql-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [SWPUCTF 2022 新生赛]ez sql 双写绕过 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5BWUSTCTF%202020%5D%E6%9C%B4%E5%AE%9E%E6%97%A0%E5%8D%8E-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-MD5%E5%BC%B1%E6%AF%94%E8%BE%83-intval%E7%89%B9%E6%80%A7-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [WUSTCTF 2020]朴实无华 信息搜集 MD5弱比较 intval特性 命令执行 空格绕过
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%9A%8F%E4%BE%BF%E6%B3%A8-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5-%E5%81%B7%E6%A2%81%E6%8D%A2%E6%9F%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [强网杯 2019]随便注 堆叠注入 偷梁换柱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSSCTF%20WEB/%5B%E9%B9%A4%E5%9F%8E%E6%9D%AF%202021%5DMiddle%20magic-php%E7%89%B9%E6%80%A7-%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87-%E5%BC%B1%E6%AF%94%E8%BE%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [鹤城杯 2021]Middle magic php特性 数组绕过 弱比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSS星辰大海
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NSS星辰大海
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phar反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/session%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session反序列化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/%E5%8F%8C%E5%86%99%24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    双写$
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ctfshow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ctfshow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web102-php%E7%89%B9%E6%80%A7-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%86%99%E5%85%A5%E6%9C%A8%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web102-php特性-php伪协议写入木马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web160-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web160-文件上传-.user.ini+日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web161-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini%2B%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web161 文件上传 .user.ini+远程文件包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web171-SQL注入-联合
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web21-%E7%88%86%E7%A0%B4-payload%E5%A4%84%E7%90%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web21-爆破-payload处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web27-%E7%88%86%E7%A0%B4-%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web27-爆破-身份证号码爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web28-%E7%88%86%E7%A0%B4-web%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web28-爆破-web目录爆破
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS%2Bjquery%E9%80%89%E6%8B%A9%E5%99%A8%2BquerySelector%E9%80%89%E6%8B%A9%E5%99%A8%2BXSS%E6%95%B0%E6%8D%AE%E5%A4%96%E6%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329-存储型XSS+jquery选择器+querySelector选择器+XSS数据外泄
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web329-%E5%AD%98%E5%82%A8%E5%9E%8BXSS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web329 存储型XSS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web330 存储型XSS GET 钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web331-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-jQuery-POST--%E9%92%93%E9%B1%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web331 存储型XSS jQuery POST  钓鱼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web359-ssrf-mysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web359 ssrf mysql
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web360-ssrf-redis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web360 ssrf redis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web369-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF%E7%BB%95%E8%BF%87-%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87-%5B%5D%E7%BB%95%E8%BF%87-%7B%7B%E7%BB%95%E8%BF%87-%E8%BF%87%E6%BB%A4request/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web369 ssti 下划线绕过 引号绕过 []绕过 {{绕过 过滤request
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web370-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web370 ssti 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web371-ssti-%7B%25%25%7D-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web371 ssti {%%} print过滤 下划线 引号 数字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web79-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E7%9F%AD%E6%A0%87%E7%AD%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web79-文件包含-php短标签
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web80-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%ABnginx%E6%97%A5%E5%BF%97%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web80-文件包含nginx日志包含
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web82-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%2Bsession%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web82-文件包含-条件竞争+session临时文件注入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/ctfshow/web87-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%A6%99%E7%94%A8%E7%94%9F%E6%88%90%E4%B8%8D%E6%AD%BB%E9%A9%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    web87-文件包含-php伪协议妙用生成不死马
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三届长城杯
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    三届长城杯
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/AI_WAF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI WAF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一场考核赛
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第一场考核赛
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/thinkphp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Thinkphp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/%E6%95%99%E5%8A%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A7%98%E5%AF%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    教务系统的秘密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#php" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PHP变量解析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        超全局变量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        正则匹配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="正则匹配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcre-preg_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCRE机制：用于正则表达式匹配操作 基本覆盖preg_*函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        编码解码函数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字符串
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        强比较和弱比较
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET和POST
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数组
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对象操作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        类
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hash
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运算符优先级
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Php特性</h1>
+
+<p>php的\<?php ?>,\<?= ?>标签可以省略末尾?&gt;闭合签，例：&lt;?php `ls`;</p>
+<p>system('ls')();同system('ls');</p>
+<p>PHP脚本使用 session_start()时开启<code>session</code>会话，会自动检测<code>PHPSESSID</code></p>
+<pre><code>有PHPsSSS则查看session文件，无则随机生成
+</code></pre>
+<p>没有定义的变量默认为NULL</p>
+<pre><code class="language-php">ffifdyop进行md5加密后会变成'or'6&lt;trash&gt;,&lt;trash&gt;为不可见字符，在mysql中会把可见字符丢掉，有时可y
+</code></pre>
+<p>在 URL 编码中，加号（+）是一个特殊字符，代表一个空格。所以，show+source 在 URL 中实际上代表 show source</p>
+<pre><code>当 PHP 解析 URL 中的查询字符串（query string）时，它会将加号（+）解析为一个空格。所以，show+source 会被 PHP 解析为 show source。然后，PHP 会将这个字符串转换为一个变量名，去掉空格，所以 show source 被转换为  show_source。
+
+这就是为什么 show+source 会被解析为 show_source 的原因
+</code></pre>
+<p>php会把请求参数中的非法字符转为下划线</p>
+<pre><code class="language-php">如：NI+SA+=txw4ever =&gt; NI_SA_=txw4ever
+
+还有[]
+</code></pre>
+<p>反斜杠绕过</p>
+<pre><code class="language-php">反斜杠 \ 代表“全局命名空间”
+在 PHP 中，\ 就像是一个绝对路径的起点：
+create_function()：相对路径。PHP 会先在当前的命名空间（如果有的话）找这个函数。如果没找到，再回全局找。
+\create_function()：绝对路径。直接告诉 PHP：“去全局命名空间（根部）找这个函数，不要在当前的命名空间里乱转
+
+例：
+namespace MyApp;
+
+// 1. 定义一个和系统同名的函数
+function strlen($str) {
+    return 100; 
+}
+// 2. 调用测试
+echo strlen(&quot;abc&quot;);   // 输出 100 (调用了当前命名空间下的函数)
+echo \strlen(&quot;abc&quot;);  // 输出 3   (调用了 PHP 全局的原生函数)
+</code></pre>
+<h2 id="php">PHP变量解析</h2>
+<p>PHP需要将所以参数装换为有效的变量名，因此在解析查询字符串时，会做以下两件事</p>
+<p>1.删除空白字符</p>
+<p>2.将某些字符串转换为下划线</p>
+<pre><code class="language-php">如果waf不允许num变量传递字母，?num=aaaa
+可以在num前面加一个空格,? num=aaaa
+这样waf就找不到这个变量了，因为这是&quot; num&quot;不是&quot;num&quot;,但是php在解析时会先把空格去掉，这样我们的代码还能正常运行且上传了非法字符
+
+/?%20news[id%00=43会转换为Array([news_id]=&gt;42)
+</code></pre>
+<h2 id="_1">超全局变量</h2>
+<p>$_GET：返回GET方式接收的关联数组</p>
+<pre><code class="language-php">例：
+http://example.com/index.php?name=John&amp;num=42
+//$_GET数组为
+$_GET = [
+    'name' =&gt; 'John',
+    'num' =&gt; '42'
+];
+</code></pre>
+<p>$_POST：接收来自POST的数据，$_POST数组类似$_GET数组</p>
+<p>$_REQUEST：接收来自 GET、POST 和 COOKIE 的数据</p>
+<p>$_SERVER：服务器和执行环境信息，包含请求包信息，服务器配置，底层连接</p>
+<pre><code class="language-php">$_SERVER['REQUEST_URI']：访问页面的url
+$_SERVER['PHP_SELF']：当前脚本相对于网站根目录的路径，常用于xss，如果不加过滤直接输出到 &lt;form action=&quot;...&quot;&gt;，攻击者可以构造路径来触发脚本
+$_SERVER['QUERY_STRING']：URL 问号 ? 后面的纯字符串
+$_SERVER['DOCUMENT_ROOT']：当前运行脚本所在的网站根目录的物理绝对路径（如 /var/www/html）
+$_SERVER['HTTP_REFERER']：告诉服务器你是从哪个页面跳过来的
+$_SERVER['REMOTE_ADDR']：用户的真实 IP 地址，Web 服务器获取的，很难直接伪造
+$_SERVER['HTTP_X_FORWARDED_FOR']：代理服务器发送的 IP，可以伪造
+$_SERVER['REQUEST_METHOD']：访问页面的请求方法
+$_SERVER['HTTPS']：如果脚本是通过 HTTPS 协议被访问，则被设为一个非空的值（通常是 on）
+</code></pre>
+<pre><code class="language-php">$_GET        // HTTP GET 请求参数
+$_POST       // HTTP POST 请求参数
+$_REQUEST    // GET + POST + COOKIE 数据
+$_SESSION    // 会话变量
+$_COOKIE     // HTTP Cookies
+$_SERVER     // 服务器和执行环境信息
+$_ENV        // 环境变量
+$_FILES      // 上传文件信息
+$GLOBALS     // 包含全部全局变量的数组
+</code></pre>
+<h2 id="_2">函数</h2>
+<pre><code class="language-php">intval() 函数通过使用指定的进制 base 转换（默认是十进制）
+
+intval() 不能用于 object，否则会产生 E_NOTICE 错误并返回 1 
+①intval():可以获取变量的整数值
+
+②int intval ( mixed $var [, int $base = 10 ] )
+参数说明：
+
+$var：要转换成 integer 的数量值。
+$base：转化所使用的进制。
+
+开头为非字符则返回0
+以数字开头读到非数字停止，如：999ad返回999，023da转换为10进制停止
+如果 base为空，通过检测 var 的格式来决定使用的进制：
+
+如果字符串包括了 “0x” (或 “0X”) 的前缀，使用 16 进制 (hex)；
+否则，如果字符串以 “0” 开始，使用 8 进制(octal)；
+否则，将使用 10 进制 (decimal)。
+
+有时可以用科学技术法绕过如，1e3
+    低版本中intval(1e3)返回1,intval(1e3+1)返回1
+
+当传入数组洪适对象返回1
+</code></pre>
+<pre><code class="language-php">array_map
+格式：array_map(callable $callback, array $array1, array $array2 = ?, array $...);
+1.$callback (回调函数):会被应用到数组中的每个元素
+2.assert会执行传递给它的PHP代码（当assert.active = On 和 assert.exception = Off）
+
+漏洞利用：
+   &lt;?php
+// 将回调替换为执行 system('ls') 命令
+array_map(function($value) {
+    system('ls');  // 执行系统命令 `ls`
+}, $_REQUEST);
+?&gt;
+</code></pre>
+<pre><code class="language-php">is_numeric
+用于检测变量是否为数字或数字字符串
+
+绕过：
+is_numeric函数对于空字符%00，无论是%00放在前后都可以判断为非数值，而%20空格字符只能放在数值后
+如：999%00,%00999,999%20
+is_numeric函数读到字母返回判断为非数值
+如：999ad，a999
+</code></pre>
+<pre><code class="language-php">parse_str()  //函数把查询字符串解析到变量中
+注释：如果未设置 array 参数，由该函数设置的变量将覆盖已存在的同名变量
+例子：&lt;?php
+parse_str(&quot;name=Peter&amp;age=43&quot;);
+echo $name.','.$age;
+?&gt;
+结果：
+Peter,43
+</code></pre>
+<pre><code class="language-php">import_request_variables() 函数将 GET／POST／Cookie 变量导入到全局作用域中。该函数在最新版本的 PHP 中已经不支持
+
+语法：bool import_request_variables ( string $types [, string $prefix ] )
+
+$types：指定需要导入的变量，可以用字母 G、P 和 C 分别表示 GET、POST 和 Cookie，这些字母不区分大小写，所以你可以使用 g 、 p 和 c 的任何组合。POST 包含了通过 POST 方法上传的文件信息。注意这些字母的顺序，当使用 gp 时，POST 变量将使用相同的名字覆盖 GET 变量。任何 GPC 以外的字母都将被忽略。
+
+$prefix： 变量名的前缀，置于所有被导入到全局作用域的变量之前。所以如果你有个名为 userid 的 GET 变量，同时提供了 pref_ 作为前缀，那么你将获得一个名为 $pref_userid 的全局变量
+</code></pre>
+<pre><code class="language-php">switch //匹配逻辑为case表达式中的值等于switch括号里的值
+
+例子：
+&lt;?php
+if(isset($_GET['param1'])){
+    $a = $_GET['param1'];
+    switch ($a) {
+        case $a&gt;=0:
+            echo 0;
+            break;
+        case $a&gt;=10:
+            echo getenv('FLAG');
+            break;
+        default:
+            echo 2;
+            break;
+    }
+} 
+//param1=0即可，因为0&gt;=10为false
+</code></pre>
+<pre><code class="language-php">strcmp //字符串比较，不能被\0截断
+绕过：
+在php 8.0之前给strcmp传入数组或对象，则返回NULL或0.php8.0后改TypeError异常
+
+当strcmp传入数字时会被转化成字符串，例：
+strcmp(45,'45')：0
+strcmp(12,2)：-1
+strcmp(4,35)：1
+</code></pre>
+<pre><code class="language-php">basename() 会删除文件名开头的非 ASCII 字符和中文
+</code></pre>
+<pre><code class="language-php">include  //如果刚开始的是一个错误的文件名，也可以进行目录穿梭
+
+如：
+&lt;?php 
+include &quot;empty.abc/../../../../../../etc/passwd&quot;;       //给一个错误的开始
+?&gt;
+可以直接包含passwd文件
+</code></pre>
+<pre><code class="language-php">header //向浏览器发送原始HTTP表头
+例：header(&quot;location:http://127.0.0.1/&quot;)
+</code></pre>
+<pre><code class="language-php">parse_url //把一个 URL 字符串“切开”，返回一个关联数组
+例子：
+&lt;?php
+$url=&quot;https://www.example.com:8080/path/to/page.php?id=123&amp;s=search#top&quot;;
+$parts=parse_url($url);
+print_r($parts);
+?&gt;
+结果:
+Array{
+[scheme] =&gt; https       //访问用的协议
+[host] =&gt; www.example.com       //访问域名或IP
+[port] =&gt; 8080      //端口好号
+[path] =&gt; /path/to/page.php     //访问文件的在网站的路径
+[query] =&gt; id=123&amp;s=search      //?后面部分
+[fragment] =&gt; top
+}
+</code></pre>
+<h2 id="_3">正则匹配</h2>
+<h3 id="pcre-preg_"><strong>PCRE机制</strong>：用于正则表达式匹配操作              基本覆盖preg_*函数</h3>
+<p>1.<strong>回溯攻击（ReDoS）</strong>漏洞：构造恶意输入，触发PCRE引擎进行大量的回溯，导致服务拒绝（DoS）</p>
+<pre><code class="language-go">通常发生在使用了.*、(.+)、(a+)+ 等模式
+例：
+$input = str_repeat('a', 10000);  // 10000个 'a'
+preg_match('/(a+)+/', $input);
+</code></pre>
+<p>2.<strong>修饰符</strong>：<code>PCRE</code> 支持许多修饰符（modifiers），例如：</p>
+<pre><code class="language-go">- `i`：不区分大小写
+- `m`：多行模式（使 `^` 和 `$` 匹配行的开始和结束，而不是整个字符串的开始和结束）
+- `s`：点号 (`.`) 匹配包括换行符在内的所有字符
+- `x`：忽略正则表达式中的空白字符和注释
+- `u`：启用 Unicode 字符串支持
+</code></pre>
+<p>3.常见的<strong>正则表达式模式</strong></p>
+<pre><code class="language-go">字符匹配
+.：匹配任何单个字符（除换行符外）
+\d：匹配任何数字，等价于 [0-9]
+\w：匹配任何字母数字字符，等价于 [a-zA-Z0-9_]
+\s：匹配任何空白字符，包括空格、制表符、换行符等
+
+重复匹配
+*：匹配前一个字符零次或多次
++：匹配前一个字符一次或多次
+{n}：匹配前一个字符恰好 n 次
+{n,}：匹配前一个字符至少 n 次
+{n,m}：匹配前一个字符 n 至 m 次
+
+位置匹配
+^：匹配字符串的开始
+$：匹配字符串的结束
+\b：匹配单词边界
+\B：匹配非单词边界
+
+选择与可选
+|：表示选择，类似于逻辑 &quot;或&quot;
+?：表示前一个字符是可选的（匹配零次或一次）
+</code></pre>
+<pre><code class="language-php">preg_match  //匹配返回1,否则返回0,传入数组或对x产生 E_WARNING 错误并返回 1
+
+preg_match('/^php$/im', $a)和preg_match('/^php$/i', $a)    /i表示匹配大小写，/m表示多行匹配
+ereg    //同preg_match，但存在NULL截断漏洞
+例：ereg (&quot;^[a-zA-Z]+$&quot;, $_GET['c'])===FALSE  //^和$表示从头匹配到尾
+    按理说$c的值必须只有小写或大写字母，但是传参c=a%00778，用%00截断即可绕过
+    因为%00为NULL，在字符串中代表结束符
+
+如果正则表达式没有/m，那只能匹配一行，有时可以用来绕过
+例:
+$aaa = preg_replace('/^(.*)level(.*)$/', '${1}&lt;!-- filtered --&gt;${2}', $_GET['aaa']);
+
+    if(preg_match('/pass_the_level_1#/', $aaa)){
+        echo &quot;here is level 2&quot;; 
+传参aaa=%0apass_the_level_1%23，换到另行即可绕过，浏览器默认不会把&quot;#&quot;及其后面的内容发送给服务器,所以url编码一下
+</code></pre>
+<pre><code class="language-php">extract //将数组展开，键名作为变量名，元素值为变量值
+例子：extract($_GET)
+    传入?a=1&amp;b=6
+    则会生成变量$a和$b值分别为1,6
+</code></pre>
+<h2 id="_4">编码解码函数</h2>
+<p>base64_encode：base64编码</p>
+<p>base64_decode：base64解码</p>
+<p>urlencode：URL编码，将空格编码为+</p>
+<p>urldecode：URL解码，可同时解码+和%20为空格</p>
+<p>json_encode将PHP数组或对象转换为JSON字符串</p>
+<pre><code class="language-php">$data = [
+    &quot;status&quot; =&gt; &quot;ok&quot;,
+    &quot;content&quot; =&gt; &quot;你好&quot;,
+    &quot;list&quot; =&gt; [1, 2, 3]
+];
+// 普通编码
+echo json_encode($data); 
+// 输出: {&quot;status&quot;:&quot;ok&quot;,&quot;content&quot;:&quot;\u4f60\u517b&quot;,&quot;list&quot;:[1,2,3]}
+
+// 中文不转义编码
+echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+// 输出: {&quot;status&quot;:&quot;ok&quot;,&quot;content&quot;:&quot;你好&quot;,&quot;list&quot;:[1,2,3]}
+</code></pre>
+<p>json_decode：将JSON字符串转换为PHP数组或变量</p>
+<pre><code class="language-php">$json_str = '{&quot;name&quot;:&quot;Tom&quot;, &quot;age&quot;:18}';
+
+// 方式 A：解码为数组
+$arr = json_decode($json_str, true);
+echo $arr['name']; // 输出: Tom
+
+// 方式 B：解码为对象
+$obj = json_decode($json_str);//同$obj = json_decode($json_str，false);
+echo $obj-&gt;name;   // 输出: Tom
+</code></pre>
+<p>serialize：将任何PHP变量转换为可存储的字符串</p>
+<p>unserialize：将字符串恢复原始的PHP变量</p>
+<p>hex2bin：将十六进制字符串转换为二进制字符串（原始字节数据）</p>
+<p>bin2hex：将二进制字符串转换为十六进制字符串</p>
+<pre><code class="language-php">例：$hex_string=&quot;3C3F706870206576616C28245F504F53545B2770617373275D293B3F3E&quot;;
+echo $binary_string=hex2bin($hex_string);
+
+输出：&lt;?php eval($_POST['pass']);?&gt;
+</code></pre>
+<p>pack：根据指定格式，将参数打包成一个二进制字符串</p>
+<pre><code class="language-php">例：$hex_string=&quot;3C3F706870206576616C28245F504F53545B2770617373275D293B3F3E&quot;;
+echo $binary_string=pack('H*',$hex_string);
+
+输出：&lt;?php eval($_POST['pass']);?&gt;
+</code></pre>
+<h2 id="_5">字符串</h2>
+<p>字符串连接：'123'.'456'='123456'</p>
+<p>strstr：查找第一次出现，并返回从该点到末尾的部分</p>
+<pre><code class="language-php">例：echo strstr('this is a book','is');
+输出：is is a book    
+</code></pre>
+<p>str_replace：替换字符，区分大小写</p>
+<p>str_ireplace：替换字符，不区分大小写</p>
+<pre><code class="language-php">例：$test=&quot;this IS a book&quot;;
+echo str_replace(&quot;is&quot;,&quot;am&quot;,$test),PHP_EOL;
+echo str_ireplace(&quot;is&quot;,&quot;am&quot;,$test);
+
+输出：
+tham IS a book
+tham am a book
+</code></pre>
+<p>substr：字符截取,针对英文，mb_substr针对中文，UTF-8编码情况下中文3个字节，substr只读一个字节，读中文容易乱码</p>
+<pre><code class="language-php">例：$test=&quot;this IS a book&quot;;
+echo substr($test,2,4).PHP_EOL;
+echo substr($test,2).PHP_EOL;
+echo substr($test,-4).PHP_EOL;
+echo substr($test,-4,2).PHP_EOL;
+
+输出：
+is I
+is IS a book
+book
+bo
+</code></pre>
+<p>strpos() -函数查找字符串在另一字符串中第一次出现的索引，针对英文，mb_strpos针对中文，原因同mb_substr</p>
+<pre><code class="language-php">例：echo strpos('this is a book','is');
+输出：2
+</code></pre>
+<p>implode：数组转字符串</p>
+<p>join：数组转字符串</p>
+<p>parse_str：将 URL 查询字符串解析为变量</p>
+<pre><code class="language-php">例：
+$query_string = &quot;name=John&amp;age=25&amp;city=NewYork&quot;;
+parse_str($query_string);       //转换变量
+
+// 结果：$name = 'John', $age = 25, $city = 'NewYork'
+echo $name;  // 输出 John
+echo $age;   // 输出 25
+echo $city;  // 输出 NewYork
+
+parse_str($query_string, $result);  //转换数组
+// 结果：$result = ['name' =&gt; 'John', 'age' =&gt; 25, 'city' =&gt; 'NewYork']
+print_r($result);
+
+</code></pre>
+<p>strtolower：全部转小写</p>
+<p>strtoupper：全部转大写</p>
+<p>stripos() - 查找字符串在另一字符串中第一次出现的索引（不区分大小写）
+strripos() - 查找字符串在另一字符串中最后一次出现的索引（不区分大小写）
+strrpos() - 查找字符串在另一字符串中最后一次出现的索引（区分大小写）</p>
+<h2 id="_6">强比较和弱比较</h2>
+<p>true和false不区分大小写</p>
+<p>强比较：1.<strong>类型必须相同</strong> - 不进行自动类型转换</p>
+<p>​               2.<strong>值必须相等</strong> - 相同类型的值完全一致</p>
+<pre><code class="language-php">1===true        //false
+0===FALSE       //false
+NAN==
+</code></pre>
+<p>弱比较：只比较值        如，12.0==12  //true</p>
+<pre><code class="language-php">字符串和数字：
+'12'==12  //true
+'12abc'==12 //true
+'adm2n'==0  //true
+
+布尔和任意值：             //true除了与0比较都是相等的
+'way'==true    //true
+'flase'==true  //true
+234==true      //true
+0==true        //false
+0==false       //true
+
+hash与0比较：
+设：md5($str)=0e420233178946742799316739797882
+md5($str) == '0'    //true
+</code></pre>
+<p>+999和999是一样的，但是有时+999可用来绕过</p>
+<h2 id="getpost">GET和POST</h2>
+<pre><code class="language-php">$_GET=&amp;$_POST       //$_GET变量指向$_POST变量所在内存地址
+$_GET?$_GET=&amp;$_POST:'flag'; //只要有GET传参，就把get方法变成post方法
+</code></pre>
+<h2 id="_7">数组</h2>
+<ul>
+<li>array_push() - 向数组尾部插入一个或多个元素。</li>
+<li>in_array() - 搜索数组中是否存在指定的值。函数有缺陷，若没有设置第三个参数，则存在强制转换（类比==）比如数组$allow含有1，in_array(1.php, $allow)为真。</li>
+</ul>
+<h2 id="_8">对象操作</h2>
+<p>定义：$a=new Object(); $a=new Object;</p>
+<p>输出：var_dump($a),print_r($a),json_encode($a),echo new ReflectionClass(’ctf‘);</p>
+<pre><code class="language-php">echo new ReflectionClass('ctf');
+new ReflectionClass('ctf')创建实例对象，包含ctf类的信息
+echo字符转换，触发魔术方法__toString，将RefletionClass对象传换字符串输出
+</code></pre>
+<h2 id="_9">类</h2>
+<p><code>Exception</code>：所有异常的基类</p>
+<p><code>CachingIterator</code>：此对象支持在另一个迭代器上进行缓存迭代</p>
+<p><code>ReflectionClass</code>:反射类</p>
+<pre><code class="language-php">1.绕过私有属性
+// 假设目标类
+class Wrapper 
+{    
+    private $doit = false; // 目标是让 $doit 变成 true
+    public function __destruct() {
+        if ($this-&gt;doit === true) {
+            eval('echo file_get_contents(&quot;flag.txt&quot;);');
+        }    
+    } 
+} // 攻击者构造的辅助代码（如果可以注入或执行） 
+$obj = new Wrapper(); 
+$rc = new ReflectionClass('Wrapper'); 
+$prop = $rc-&gt;getProperty('doit'); // 关键步骤：设置私有属性为可访问，并修改其值 $prop-&gt;setAccessible(true);  $prop-&gt;setValue($obj, true);  // 此时，当 $obj 被销毁时，__destruct 就会成功执行命令
+
+2,反射类不仅仅可以建立对类的映射，也可以**建立对PHP基本方法的映射**
+例：
+echo new ReflectionClass(system('ls'))  //输出命令ls执行结果
+echo new ReflectionClass(’ctf‘）     //输出ctf类的所有信息
+</code></pre>
+<p><code>DirectoryInterator</code>：遍历目录的类</p>
+<p><code>FilesystemIterator</code>：遍历文件的类</p>
+<h2 id="hash">hash</h2>
+<p>强md5绕过，md5()函数中要是字符串，php中当数组被转成字符串时，无论是什么都会被转成“Array”</p>
+<pre><code class="language-php">&lt;?php
+include(&quot;flag.php&quot;);
+highlight_file(__FILE__);
+if (isset($_POST['a']) and isset($_POST['b'])) {
+if ($_POST['a'] != $_POST['b'])
+if (md5($_POST['a']) === md5($_POST['b']))
+echo $flag;
+else
+print 'Wrong.';
+}
+?&gt;//a[]=12&amp;b[]=2
+</code></pre>
+<p>sha1：计算字符串的 SHA-1 哈希值，绕过同md5</p>
+<h2 id="_10">运算符优先级</h2>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>运算符</th>
+<th>描述</th>
+<th>结合性</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong><code>clone</code> <code>new</code></strong></td>
+<td>对象创建</td>
+<td>无</td>
+<td><code>new MyClass()</code></td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong><code>\**</code></strong></td>
+<td>幂运算</td>
+<td>右</td>
+<td><code>2 ** 3 ** 2</code> = 512</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong><code>++</code> <code>--</code></strong></td>
+<td>递增/递减</td>
+<td>无</td>
+<td><code>++$a</code> <code>$a++</code></td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong><code>~</code> <code>(int)</code> <code>(float)</code>等</strong></td>
+<td>类型转换/位取反</td>
+<td>右</td>
+<td><code>~(int)$a</code></td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong><code>!</code></strong></td>
+<td>逻辑非</td>
+<td>右</td>
+<td><code>!$condition</code></td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td><strong><code>\*</code> <code>/</code> <code>%</code></strong></td>
+<td>乘、除、取模</td>
+<td>左</td>
+<td><code>10 * 3 / 2</code></td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td><strong><code>+</code> <code>-</code> <code>.</code></strong></td>
+<td>加、减、字符串连接</td>
+<td>左</td>
+<td><code>5 + 3 . "str"</code></td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td><strong><code>&lt;&lt;</code> <code>&gt;&gt;</code></strong></td>
+<td>位左移、右移</td>
+<td>左</td>
+<td><code>$a &lt;&lt; 2</code></td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td><strong><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></strong></td>
+<td>比较运算符</td>
+<td>无</td>
+<td><code>$a &gt; $b</code></td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><strong><code>==</code> <code>!=</code> <code>===</code> <code>!==</code> <code>&lt;</code> <code>&lt;=&gt;</code></strong></td>
+<td>相等性比较</td>
+<td>无</td>
+<td><code>$a == $b</code></td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td><strong><code>&amp;</code></strong></td>
+<td>按位与、引用</td>
+<td>左</td>
+<td><code>$a &amp; $b</code></td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td><strong><code>^</code></strong></td>
+<td>按位异或</td>
+<td>左</td>
+<td><code>$a ^ $b</code></td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td><strong><code>|</code></strong></td>
+<td>按位或</td>
+<td>左</td>
+<td><code>$a | $b</code></td>
+</tr>
+<tr>
+<td><strong>14</strong></td>
+<td><strong><code>&amp;&amp;</code></strong></td>
+<td>逻辑与</td>
+<td>左</td>
+<td><code>$a &amp;&amp; $b</code></td>
+</tr>
+<tr>
+<td><strong>15</strong></td>
+<td><strong><code>||</code></strong></td>
+<td>逻辑或</td>
+<td>左</td>
+<td><code>$a || $b</code></td>
+</tr>
+<tr>
+<td><strong>16</strong></td>
+<td><strong><code>??</code></strong></td>
+<td>NULL 合并</td>
+<td>左</td>
+<td><code>$a ?? $b</code></td>
+</tr>
+<tr>
+<td><strong>17</strong></td>
+<td><strong><code>?:</code></strong></td>
+<td>三元运算符</td>
+<td>左</td>
+<td><code>$a ? $b : $c</code></td>
+</tr>
+<tr>
+<td><strong>18</strong></td>
+<td><strong><code>=</code> <code>+=</code> <code>-=</code>等</strong></td>
+<td>赋值运算符</td>
+<td>右</td>
+<td><code>$a = $b = 5</code></td>
+</tr>
+<tr>
+<td><strong>19</strong></td>
+<td><strong><code>and</code></strong></td>
+<td>逻辑与（低优先级）</td>
+<td>左</td>
+<td><code>$a and $b</code></td>
+</tr>
+<tr>
+<td><strong>20</strong></td>
+<td><strong><code>xor</code></strong></td>
+<td>逻辑异或</td>
+<td>左</td>
+<td><code>$a xor $b</code></td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td><strong><code>or</code></strong></td>
+<td>逻辑或（低优先级）</td>
+<td>左</td>
+<td><code>$a or $b</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
