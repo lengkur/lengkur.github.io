@@ -1,0 +1,15 @@
+/* source/css/random_cover.css */
+
+/* 强制首页和归档页的封面图透明，让底下的背景色透出来 */
+.recent-post-item .post_cover img,
+.article-sort-item-img img,
+.aside-content .item-thumbnail img {
+  opacity: 0; 
+  transition: background-color 0.3s;
+}
+
+/* 针对安知鱼/Butterfly 特殊布局的修正 */
+.recent-post-item .post_cover,
+.article-sort-item-img {
+  background-color: #eee; /* 默认给个灰色，脚本加载完会变色 */
+}

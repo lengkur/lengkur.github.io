@@ -1,0 +1,24 @@
+/* 1. 强制让主题背景透明，露出底下的 Canvas */
+#web_bg {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* 2. 为了保证文章能看清，给文章容器加个半透明底色 */
+#content-inner, #page, .layout {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+[data-theme="dark"] #content-inner, 
+[data-theme="dark"] #page, 
+[data-theme="dark"] .layout {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 3. 修复流星雨不显示的问题：提高层级 */
+#star-field {
+  z-index: 2 !important; /* 提到图片上面 */
+  pointer-events: none;
+}
+.star-meteor {
+  z-index: 10 !important;
+}

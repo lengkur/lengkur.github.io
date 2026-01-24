@@ -1,0 +1,92 @@
+/* 1. 隐藏默认的分类/归档时间线 */
+#category .article-sort-item::before,
+#category .article-sort-item::after {
+    display: none !important;
+}
+
+/* 2. 让每一项变成透明且带数字的效果 */
+#category .article-sort-item {
+    border: none !important;
+    margin-bottom: 20px !important;
+    padding-left: 0 !important;
+    position: relative;
+    background: rgba(255, 255, 255, 0.05); /* 淡淡的半透明背景 */
+    padding: 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+#category .article-sort-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(10px);
+}
+
+/* 3. 模拟右侧的大数字索引 (伪元素) */
+#category .article-sort {
+    counter-reset: article-count; /* 设置计数器 */
+}
+
+#category .article-sort-item::after {
+    display: block !important;
+    content: counter(article-count);
+    counter-increment: article-count;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    font-style: italic;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.1); /* 数字调得很淡 */
+    pointer-events: none;
+}
+
+/* 4. 文字颜色适配暗色背景 */
+#category .article-sort-item-title {
+    color: #eee !important;
+    font-size: 1.2rem !important;
+}
+/* 让分类页的卡片更有质感 */
+#recent-posts > .recent-post-item {
+    border-radius: 12px;      /* 圆角 */
+    border: 1px solid #e3e8f7; /* 淡淡的边框 */
+    box-shadow: 0 5px 12px -5px rgba(0, 0, 0, 0.1); /* 阴影 */
+    transition: all 0.3s;
+}
+
+/* 鼠标悬停时浮起效果 */
+#recent-posts > .recent-post-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.2);
+}
+#site-title {
+  background: linear-gradient(90deg, #ff0000, #00ff00, #00ffff, #ff00ff, #ff0000);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: stream 5s linear infinite;
+  font-size: 3rem !important; /* 字体加大 */
+  text-shadow: none;
+}
+
+@keyframes stream {
+  0% { background-position: 0 0; }
+  100% { background-position: -200% 0; }
+}
+/* 1. 让页脚变透明，去掉那个蓝色 */
+#footer {
+    background: transparent !important; /* 强制透明 */
+    backdrop-filter: blur(5px);         /* 加一点点毛玻璃模糊，防文字看不清 */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* 加一条极细的顶部分界线 */
+}
+
+/* 2. 把页脚文字变成半透明白色（适配深色背景） */
+#footer-wrap, #footer-wrap a {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 3. 去掉页脚那两行默认的“Framework Hexo”广告词（可选，为了简洁） */
+#footer-wrap .copyright {
+    font-size: 14px;
+}
+
