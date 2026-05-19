@@ -1,0 +1,383 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>categories | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="分类索引 &#x2F; Categories Index">
+<meta property="og:type" content="website">
+<meta property="og:title" content="categories">
+<meta property="og:url" content="http://lengkur.github.io/categories/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="分类索引 &#x2F; Categories Index">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lengkur.github.io/img/lengkur.png">
+<meta property="article:published_time" content="2026-01-23T08:55:17.000Z">
+<meta property="article:modified_time" content="2026-05-04T03:41:18.749Z">
+<meta property="article:author" content="Lengkur">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lengkur.github.io/img/lengkur.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="http://lengkur.github.io/categories/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'categories',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><style>#loading-box {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(0,255,174,.08), transparent 32%),
+    linear-gradient(180deg, #02050a 0%, #05070d 100%);
+  transition: opacity .45s ease, visibility .45s ease;
+  overflow: hidden;
+}
+#loading-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,174,.035) 1px, transparent 1px);
+  background-size: 100% 4px, 24px 24px;
+  opacity: .35;
+  pointer-events: none;
+}
+.boot-shell {
+  position: relative;
+  width: min(760px, 92vw);
+  border: 1px solid rgba(0,255,174,.22);
+  border-radius: 18px;
+  background: rgba(5, 10, 18, .92);
+  box-shadow: 0 0 0 1px rgba(0,255,174,.08), 0 22px 80px rgba(0,0,0,.55), 0 0 32px rgba(0,255,174,.08);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  color: #d9fef1;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+.boot-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%, transparent 70%, rgba(0,255,174,.03));
+  pointer-events: none;
+}
+.boot-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0,255,174,.12);
+  background: rgba(6, 12, 22, .96);
+  color: #8ef7d1;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.boot-dots {
+  display: flex;
+  gap: 8px;
+}
+.boot-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,174,.22);
+  box-shadow: 0 0 10px rgba(0,255,174,.18);
+}
+.boot-main {
+  padding: 28px 26px 24px;
+}
+.boot-logo {
+  margin-bottom: 18px;
+  color: #eafff8;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-shadow: 0 0 14px rgba(0,255,174,.15);
+}
+.boot-logo .prompt {
+  color: #00ffae;
+  margin-right: 10px;
+}
+.boot-lines {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #9fc8b8;
+}
+.boot-line {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: bootLine .45s ease forwards;
+}
+.boot-line:nth-child(1){animation-delay:.1s}
+.boot-line:nth-child(2){animation-delay:.35s}
+.boot-line:nth-child(3){animation-delay:.6s}
+.boot-line:nth-child(4){animation-delay:.85s}
+.boot-line:nth-child(5){animation-delay:1.1s}
+.boot-line .ok {
+  color: #00ffae;
+}
+.boot-progress-wrap {
+  margin-top: 18px;
+}
+.boot-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #78f3ca;
+  font-size: 13px;
+}
+.boot-progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,174,.18);
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+}
+.boot-progress::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, #00ffae, #51d9ff);
+  box-shadow: 0 0 16px rgba(0,255,174,.22);
+  animation: bootProgress 1.65s cubic-bezier(.4,0,.2,1) forwards;
+}
+.boot-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transform: translateX(-120px);
+  animation: bootShine 1.2s linear infinite;
+  animation-delay: .8s;
+}
+.boot-footer {
+  margin-top: 16px;
+  color: rgba(159, 200, 184, .8);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+@keyframes bootLine {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bootProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes bootShine {
+  to { transform: translateX(760px); }
+}
+@media (max-width: 640px) {
+  .boot-main { padding: 22px 18px 18px; }
+  .boot-topbar { padding: 12px 14px; }
+  .boot-lines { font-size: 12px; }
+}</style><div class="boot-shell"><div class="boot-topbar"><div class="boot-title">LENGKUR // boot sequence</div><div class="boot-dots"><span></span><span></span><span></span></div></div><div class="boot-main"><div class="boot-logo"><span class="prompt">></span><span>Lengkur</span></div><div class="boot-lines"><div class="boot-line">[*] loading workspace: `/notes` `/wp` `/tags`</div><div class="boot-line">[*] mounting modules: `php` `flask` `mysql` `redis`</div><div class="boot-line">[*] parsing writeups and exploit notes</div><div class="boot-line">[<span class="ok">OK</span>] security knowledge base online</div><div class="boot-line">[<span class="ok">OK</span>] access granted :: welcome back</div></div><div class="boot-progress-wrap"><div class="boot-progress-label"><span>initializing terminal ui</span><span>100%</span></div><div class="boot-progress"></div></div><div class="boot-footer">root@lengkur:~$ enter blog</div></div></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  if (!loadingBox) return;
+  const removeLoading = () => {
+    loadingBox.style.opacity = '0';
+    loadingBox.style.visibility = 'hidden';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 450);
+  };
+  window.addEventListener('load', () => setTimeout(removeLoading, 900));
+  document.addEventListener('pjax:complete', removeLoading);
+  setTimeout(removeLoading, 4200);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #05070d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">122</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="page type-categories" id="body-wrap"><header class="not-home-page fixed" id="page-header" style="background-image: url(/img/black.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">categories</h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="category-lists"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/">wp</a><span class="category-list-count">104</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/wp/DASCTF/">DASCTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/HYNUCTF/">HYNUCTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/LilacCTF-2026/">LilacCTF 2026</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/NCTF/">NCTF</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">NSS 工坊web基础入门</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/NSSCTF-WEB/">NSSCTF WEB</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/NSS%E6%98%9F%E8%BE%B0%E5%A4%A7%E6%B5%B7/">NSS星辰大海</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/SHCTF/">SHCTF</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/UniCTF/">UniCTF</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/VNCTF/">VNCTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/XMCTF/">XMCTF</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/ciscn2026/">ciscn2026</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/ctfshow/">ctfshow</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/furryctf/">furryctf</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/polarctf/">polarctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/">三届长城杯</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/">星芒杯2026</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/%E6%AF%8F%E5%91%A8%E7%AE%97%E6%B3%95%E9%A2%98/">每周算法题</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/">第一场考核赛</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/wp/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%B5%9B%E5%8D%8A%E5%86%B3%E8%B5%9B/">软件系统赛半决赛</a><span class="category-list-count">2</span></li></ul></li></ul></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">CTF Web / Writeups / Security Notes</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">122</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><i class="fas fa-terminal"></i> root@lengkur:~$ share writeups && learn security</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" title="php命令执行">php命令执行</a><time datetime="2026-05-04T09:49:11.000Z" title="发表于 2026-05-04 17:49:11">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/Flask/" title="Flask">Flask</a><time datetime="2026-05-04T02:54:30.000Z" title="发表于 2026-05-04 10:54:30">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="php反序列化">php反序列化</a><time datetime="2026-05-04T02:12:32.000Z" title="发表于 2026-05-04 10:12:32">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/03/notes/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含">文件包含</a><time datetime="2026-05-03T12:41:39.000Z" title="发表于 2026-05-03 20:41:39">2026-05-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/02/notes/SQL/" title="SQL">SQL</a><time datetime="2026-05-02T13:36:28.000Z" title="发表于 2026-05-02 21:36:28">2026-05-02</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/notes/"><span class="card-category-list-name">notes</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/"><span class="card-category-list-name">wp</span><span class="card-category-list-count">104</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/DASCTF/"><span class="card-category-list-name">DASCTF</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/HYNUCTF/"><span class="card-category-list-name">HYNUCTF</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/LilacCTF-2026/"><span class="card-category-list-name">LilacCTF 2026</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/NCTF/"><span class="card-category-list-name">NCTF</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">NSS 工坊web基础入门</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/wp/NSSCTF-WEB/"><span class="card-category-list-name">NSSCTF WEB</span><span class="card-category-list-count">10</span></a></li></ul></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/polarctf/" style="font-size: 1.1em; color: #999">polarctf</a> <a href="/tags/SHA1/" style="font-size: 1.17em; color: #999ca0">SHA1</a> <a href="/tags/Node-js/" style="font-size: 1.17em; color: #999ca0">Node.js</a> <a href="/tags/%E4%B8%89%E5%B1%8A%E9%95%BF%E5%9F%8E%E6%9D%AF/" style="font-size: 1.12em; color: #999a9b">三届长城杯</a> <a href="/tags/session/" style="font-size: 1.43em; color: #99a6b8">session</a> <a href="/tags/XSS/" style="font-size: 1.24em; color: #999fa6">XSS</a> <a href="/tags/PHP/" style="font-size: 1.5em; color: #99a9bf">PHP</a> <a href="/tags/XMCTF/" style="font-size: 1.22em; color: #999ea4">XMCTF</a> <a href="/tags/NCTF/" style="font-size: 1.17em; color: #999ca0">NCTF</a> <a href="/tags/MD5/" style="font-size: 1.34em; color: #99a2af">MD5</a> <a href="/tags/RCE/" style="font-size: 1.38em; color: #99a4b4">RCE</a> <a href="/tags/Python/" style="font-size: 1.48em; color: #99a8bd">Python</a> <a href="/tags/htaccess/" style="font-size: 1.1em; color: #999">.htaccess</a> <a href="/tags/SSRF/" style="font-size: 1.29em; color: #99a1ab">SSRF</a> <a href="/tags/NSS-%E5%B7%A5%E5%9D%8Aweb%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" style="font-size: 1.19em; color: #999da2">NSS 工坊web基础入门</a> <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.29em; color: #99a1ab">反序列化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 1.12em; color: #999a9b">源码泄露</a> <a href="/tags/NSSCTF-WEB/" style="font-size: 1.29em; color: #99a1ab">NSSCTF WEB</a> <a href="/tags/%E5%BC%B1%E6%AF%94%E8%BE%83/" style="font-size: 1.15em; color: #999b9d">弱比较</a> <a href="/tags/%E7%AC%AC%E4%B8%80%E5%9C%BA%E8%80%83%E6%A0%B8%E8%B5%9B/" style="font-size: 1.17em; color: #999ca0">第一场考核赛</a> <a href="/tags/PHAR/" style="font-size: 1.19em; color: #999da2">PHAR</a> <a href="/tags/UniCTF/" style="font-size: 1.19em; color: #999da2">UniCTF</a> <a href="/tags/JavaScript/" style="font-size: 1.19em; color: #999da2">JavaScript</a> <a href="/tags/SHCTF/" style="font-size: 1.31em; color: #99a1ad">SHCTF</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 1.41em; color: #99a5b6">文件包含</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%B5%9B%E5%8D%8A%E5%86%B3%E8%B5%9B/" style="font-size: 1.12em; color: #999a9b">软件系统赛半决赛</a> <a href="/tags/furryctf/" style="font-size: 1.15em; color: #999b9d">furryctf</a> <a href="/tags/%E7%BB%95%E8%BF%87/" style="font-size: 1.45em; color: #99a7bb">绕过</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/" style="font-size: 1.15em; color: #999b9d">信息搜集</a> <a href="/tags/Python2/" style="font-size: 1.12em; color: #999a9b">Python2</a> <a href="/tags/SQLi/" style="font-size: 1.36em; color: #99a3b2">SQLi</a> <a href="/tags/PDF/" style="font-size: 1.38em; color: #99a4b4">PDF</a> <a href="/tags/Redis/" style="font-size: 1.12em; color: #999a9b">Redis</a> <a href="/tags/%E6%AF%8F%E5%91%A8%E7%AE%97%E6%B3%95%E9%A2%98/" style="font-size: 1.17em; color: #999ca0">每周算法题</a> <a href="/tags/%E6%98%9F%E8%8A%92%E6%9D%AF2026/" style="font-size: 1.24em; color: #999fa6">星芒杯2026</a> <a href="/tags/LilacCTF-2026/" style="font-size: 1.1em; color: #999">LilacCTF 2026</a> <a href="/tags/ciscn2026/" style="font-size: 1.1em; color: #999">ciscn2026</a> <a href="/tags/Java/" style="font-size: 1.26em; color: #99a0a9">Java</a> <a href="/tags/SSTI/" style="font-size: 1.34em; color: #99a2af">SSTI</a> <a href="/tags/XXE/" style="font-size: 1.12em; color: #999a9b">XXE</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">6</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">22</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">10</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">12</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">72</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">122</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2026-01-24T10:25:11.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">68.6k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-05-19T01:32:21.534Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="/js/universe.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化,XXE,沙盒逃逸,内存马" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

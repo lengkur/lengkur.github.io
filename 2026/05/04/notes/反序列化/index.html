@@ -1,0 +1,408 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>php反序列化 | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="php反序列化在请求头传序列化字符串可以url编码，不然有时候会被’;’分割成不完整 魔术方法123456789101112131415__construct:创建对象最先调用__destruct:对象被销毁调用__clone:使用clone复制对象时调用，如clone $obj__get:读取不可访问的值时调用__set:给不可访问的属性赋值时调用__isset:对不可访问的属性调用isset或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php反序列化">
+<meta property="og:url" content="http://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="php反序列化在请求头传序列化字符串可以url编码，不然有时候会被’;’分割成不完整 魔术方法123456789101112131415__construct:创建对象最先调用__destruct:对象被销毁调用__clone:使用clone复制对象时调用，如clone $obj__get:读取不可访问的值时调用__set:给不可访问的属性赋值时调用__isset:对不可访问的属性调用isset或">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lengkur.github.io/img/black.jpg">
+<meta property="article:published_time" content="2026-05-04T02:12:32.000Z">
+<meta property="article:modified_time" content="2026-05-04T09:25:38.923Z">
+<meta property="article:author" content="Lengkur">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="HTTP">
+<meta property="article:tag" content="绕过">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="SSRF">
+<meta property="article:tag" content="反序列化">
+<meta property="article:tag" content="PHAR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lengkur.github.io/img/black.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "php反序列化",
+  "url": "http://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/",
+  "image": "http://lengkur.github.io/img/black.jpg",
+  "datePublished": "2026-05-04T02:12:32.000Z",
+  "dateModified": "2026-05-04T09:25:38.923Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "http://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="http://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'php反序列化',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><style>#loading-box {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(0,255,174,.08), transparent 32%),
+    linear-gradient(180deg, #02050a 0%, #05070d 100%);
+  transition: opacity .45s ease, visibility .45s ease;
+  overflow: hidden;
+}
+#loading-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,174,.035) 1px, transparent 1px);
+  background-size: 100% 4px, 24px 24px;
+  opacity: .35;
+  pointer-events: none;
+}
+.boot-shell {
+  position: relative;
+  width: min(760px, 92vw);
+  border: 1px solid rgba(0,255,174,.22);
+  border-radius: 18px;
+  background: rgba(5, 10, 18, .92);
+  box-shadow: 0 0 0 1px rgba(0,255,174,.08), 0 22px 80px rgba(0,0,0,.55), 0 0 32px rgba(0,255,174,.08);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  color: #d9fef1;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+.boot-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%, transparent 70%, rgba(0,255,174,.03));
+  pointer-events: none;
+}
+.boot-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0,255,174,.12);
+  background: rgba(6, 12, 22, .96);
+  color: #8ef7d1;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.boot-dots {
+  display: flex;
+  gap: 8px;
+}
+.boot-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,174,.22);
+  box-shadow: 0 0 10px rgba(0,255,174,.18);
+}
+.boot-main {
+  padding: 28px 26px 24px;
+}
+.boot-logo {
+  margin-bottom: 18px;
+  color: #eafff8;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-shadow: 0 0 14px rgba(0,255,174,.15);
+}
+.boot-logo .prompt {
+  color: #00ffae;
+  margin-right: 10px;
+}
+.boot-lines {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #9fc8b8;
+}
+.boot-line {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: bootLine .45s ease forwards;
+}
+.boot-line:nth-child(1){animation-delay:.1s}
+.boot-line:nth-child(2){animation-delay:.35s}
+.boot-line:nth-child(3){animation-delay:.6s}
+.boot-line:nth-child(4){animation-delay:.85s}
+.boot-line:nth-child(5){animation-delay:1.1s}
+.boot-line .ok {
+  color: #00ffae;
+}
+.boot-progress-wrap {
+  margin-top: 18px;
+}
+.boot-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #78f3ca;
+  font-size: 13px;
+}
+.boot-progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,174,.18);
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+}
+.boot-progress::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, #00ffae, #51d9ff);
+  box-shadow: 0 0 16px rgba(0,255,174,.22);
+  animation: bootProgress 1.65s cubic-bezier(.4,0,.2,1) forwards;
+}
+.boot-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transform: translateX(-120px);
+  animation: bootShine 1.2s linear infinite;
+  animation-delay: .8s;
+}
+.boot-footer {
+  margin-top: 16px;
+  color: rgba(159, 200, 184, .8);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+@keyframes bootLine {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bootProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes bootShine {
+  to { transform: translateX(760px); }
+}
+@media (max-width: 640px) {
+  .boot-main { padding: 22px 18px 18px; }
+  .boot-topbar { padding: 12px 14px; }
+  .boot-lines { font-size: 12px; }
+}</style><div class="boot-shell"><div class="boot-topbar"><div class="boot-title">LENGKUR // boot sequence</div><div class="boot-dots"><span></span><span></span><span></span></div></div><div class="boot-main"><div class="boot-logo"><span class="prompt">></span><span>Lengkur</span></div><div class="boot-lines"><div class="boot-line">[*] loading workspace: `/notes` `/wp` `/tags`</div><div class="boot-line">[*] mounting modules: `php` `flask` `mysql` `redis`</div><div class="boot-line">[*] parsing writeups and exploit notes</div><div class="boot-line">[<span class="ok">OK</span>] security knowledge base online</div><div class="boot-line">[<span class="ok">OK</span>] access granted :: welcome back</div></div><div class="boot-progress-wrap"><div class="boot-progress-label"><span>initializing terminal ui</span><span>100%</span></div><div class="boot-progress"></div></div><div class="boot-footer">root@lengkur:~$ enter blog</div></div></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  if (!loadingBox) return;
+  const removeLoading = () => {
+    loadingBox.style.opacity = '0';
+    loadingBox.style.visibility = 'hidden';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 450);
+  };
+  window.addEventListener('load', () => setTimeout(removeLoading, 900));
+  document.addEventListener('pjax:complete', removeLoading);
+  setTimeout(removeLoading, 4200);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #05070d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">122</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/black.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">php反序列化</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">php反序列化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-04T02:12:32.000Z" title="发表于 2026-05-04 10:12:32">2026-05-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-04T09:25:38.923Z" title="更新于 2026-05-04 17:25:38">2026-05-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/notes/">notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="php反序列化"><a href="#php反序列化" class="headerlink" title="php反序列化"></a>php反序列化</h1><p>在请求头传序列化字符串可以url编码，不然有时候会被’;’分割成不完整</p>
+<h2 id="魔术方法"><a href="#魔术方法" class="headerlink" title="魔术方法"></a>魔术方法</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php">__construct:创建对象最先调用<br>__destruct:对象被销毁调用<br>__clone:使用<span class="hljs-keyword">clone</span>复制对象时调用，如<span class="hljs-keyword">clone</span> <span class="hljs-variable">$obj</span><br>__get:读取不可访问的值时调用<br>__set:给不可访问的属性赋值时调用<br>__isset:对不可访问的属性调用<span class="hljs-keyword">isset</span>或<span class="hljs-keyword">empty</span>时调用<br>__unset:对不可访问的属性调用<span class="hljs-keyword">unset</span>时调用<br>__call:调用不可访问的方法时触发<br>__callStatic:同__call<br>__toString:对象被当作字符串使用时触发，如<span class="hljs-keyword">echo</span> <span class="hljs-variable">$obj</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">echo</span> file_put_content <span class="hljs-string">&#x27;&#x27;</span>.<br>__invoke:以函数的方式调用对象时触发，如<span class="hljs-variable">$obj</span>()<br>__sleep:在执行serialize之前调用，返回需要被序列化的属性数组<br>__wakeup:执行unserialize时调用<br>__serialize/__unserialize:优先级高于__sleep,__wakeup<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2><p>可以在数字前加+绕过</p>
+<p>引用绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs php">例子：<span class="hljs-class"><span class="hljs-keyword">class</span> 鼻嗅爱</span>&#123;<br>    <span class="hljs-keyword">private</span> $亢金龙;<br>    <span class="hljs-keyword">private</span> $定风珠;<br>    <span class="hljs-keyword">private</span> $黄眉;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__toString</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-variable language_">$this</span>-&gt;亢金龙 = <span class="hljs-string">&#x27;飞天&#x27;</span>;<br>        <span class="hljs-variable language_">$this</span>-&gt;定风珠 = <span class="hljs-string">&#x27;落地&#x27;</span>;<br>        <span class="hljs-keyword">if</span>(<span class="hljs-variable language_">$this</span>-&gt;亢金龙 == <span class="hljs-string">&#x27;飞天&#x27;</span>)&#123;<br>            <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;亢金龙怎么才能落地呢？&#x27;</span>);<br>        &#125;<span class="hljs-keyword">elseif</span>(<span class="hljs-variable language_">$this</span>-&gt;亢金龙 == <span class="hljs-string">&#x27;落地&#x27;</span>) &#123;<br>            <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;level up to 3&#x27;</span>;<br>            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">$this</span>-&gt;黄眉-&gt;后天人种袋;<br>                <br>        &#125;<br>    &#125;<br>&#125; <br>只需要在exp中加入<br><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-variable language_">$this</span>-&gt;亢金龙=&amp;<span class="hljs-variable language_">$this</span>-&gt;定风珠;<br>&#125;<br>就可以绕过<span class="hljs-keyword">if</span><br></code></pre></td></tr></table></figure>
+
+<p>编码绕过</p>
+<p>进制绕过：大写S可以解析十六进制</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">s:<span class="hljs-string">&#x27;&#x27;</span><br>S:<span class="hljs-string">&#x27;\x3023&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>字符逃逸</p>
+<h2 id="属性修饰符"><a href="#属性修饰符" class="headerlink" title="属性修饰符"></a>属性修饰符</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">## </span><br><br>当类对象中变量不同修饰符序列化后的变化<br>权限  						序列化变量名<br><span class="hljs-keyword">public</span> 变量名;  				<span class="hljs-string">&quot;变量名&quot;</span> (正常不变)<br><span class="hljs-keyword">private</span> 变量名;				<span class="hljs-string">&quot;%00类名%00变量名&quot;</span><br><span class="hljs-keyword">protected</span> 变量名;  			<span class="hljs-string">&quot;%00*%00变量名&quot;</span><br><br>在很多下情况需要注意如果使用<span class="hljs-keyword">echo</span>进行输出类对象的序列化输出，默认会把%<span class="hljs-number">00</span>空格吃掉，在丢失%<span class="hljs-number">00</span>空格的情况下反序列化会失败<br><br>绕过：<br>    将序列化字符串用urlencode进行url编码，<span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">urlencode</span>(<span class="hljs-title function_ invoke__">serialize</span>(<span class="hljs-variable">$a</span>))   <br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="wakeup绕过："><a href="#wakeup绕过：" class="headerlink" title="__wakeup绕过："></a>__wakeup绕过：</h2><p>1.对象属性个数的值就大于真实的属性个数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">例子：O:<span class="hljs-number">3</span>:<span class="hljs-string">&quot;NSS&quot;</span>:<span class="hljs-number">1</span>:&#123;s:<span class="hljs-number">4</span>:<span class="hljs-string">&quot;name&quot;</span>;s:<span class="hljs-number">3</span>:<span class="hljs-string">&quot;ctf&quot;</span>;&#125;改成：O:<span class="hljs-number">3</span>:<span class="hljs-string">&quot;NSS&quot;</span>:<span class="hljs-number">2</span>:&#123;s:<span class="hljs-number">4</span>:<span class="hljs-string">&quot;name&quot;</span>;s:<span class="hljs-number">3</span>:<span class="hljs-string">&quot;ctf&quot;</span>;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>2.php引用赋值&amp;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs php">例子：<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KeyPort</span></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$key</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span>(<span class="hljs-params"></span>)</span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-variable language_">$this</span>-&gt;key=False;<br>        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable language_">$this</span>-&gt;wakeup)||!<span class="hljs-variable language_">$this</span>-&gt;wakeup)&#123;<br>            <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;You get it!&quot;</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__wakeup</span>(<span class="hljs-params"></span>)</span>&#123;<br>        <span class="hljs-variable language_">$this</span>-&gt;wakeup=True;<br>    &#125;<br>&#125;<br><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;pop&#x27;</span>]))&#123;<br>    @<span class="hljs-title function_ invoke__">unserialize</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;pop&#x27;</span>]);<br>&#125;<br>可以这样写exp<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KeyPort</span></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$key</span>;<br>&#125;<br><span class="hljs-variable">$keyport</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">KeyPort</span>();<br><span class="hljs-variable">$keyport</span>-&gt;key=&amp;<span class="hljs-variable">$keyport</span>-&gt;wakeup;<br><span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">serialize</span>(<span class="hljs-variable">$keyport</span>); <br><span class="hljs-comment">#O:7:&quot;KeyPort&quot;:2:&#123;s:3:&quot;key&quot;;N;s:6:&quot;wakeup&quot;;R:2;&#125;</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="phar反序列化"><a href="#phar反序列化" class="headerlink" title="phar反序列化"></a>phar反序列化</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>&#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-variable">$num</span>;<br>&#125;<br><span class="hljs-variable">$a</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Test</span>();<br><span class="hljs-variable">$a</span>-&gt;num=<span class="hljs-number">1</span>;<br><br><span class="hljs-variable">$phar</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Phar</span>(<span class="hljs-string">&quot;a.phar&quot;</span>); <span class="hljs-comment">// 创建一个名为 &quot;a.phar&quot; 的 Phar 归档文件。</span><br><span class="hljs-variable">$phar</span>-&gt;<span class="hljs-title function_ invoke__">startBuffering</span>(); <span class="hljs-comment">//使用 startBuffering() 方法开始缓冲，以便在添加文件之前可以对 Phar 对象进行配置。</span><br><span class="hljs-variable">$phar</span>-&gt;<span class="hljs-title function_ invoke__">setStub</span>(<span class="hljs-string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="hljs-comment">/* 设置stub，必须以__HALT_COMPILER(); ?&gt;结尾*/</span><br><span class="hljs-variable">$phar</span>-&gt;<span class="hljs-title function_ invoke__">setMetaData</span>(<span class="hljs-variable">$a</span>); <span class="hljs-comment"># 设置自定义的metadata，序列化存储，解析式会被序列化。</span><br><span class="hljs-variable">$phar</span>-&gt;<span class="hljs-title function_ invoke__">addFromString</span>(<span class="hljs-string">&quot;test2.txt&quot;</span>, <span class="hljs-string">&quot;test2&quot;</span>); <span class="hljs-comment">//phar文件里面的文件为test2.txt,内容为test2</span><br><span class="hljs-variable">$phar</span>-&gt;<span class="hljs-title function_ invoke__">stopBuffering</span>(); <span class="hljs-comment"># 停止缓冲，将所有的配置应用到 Phar 文件中</span><br><br><span class="hljs-meta">?&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="原生类"><a href="#原生类" class="headerlink" title="原生类"></a>原生类</h2><p>SoapClient：当SoapClient调用一个不存在的方法时，会自动调用__call魔术方法，会立即向location发送一个HTTP报文</p>
+<p>php7版本之前在底层并没有做严格过滤，只是把user_agent字符串无脑拼接到了User-Agent:后面，然后加了“\r\n”，所以存在CRLF注入</p>
+<p>直接造成了PHP反序列化、SSRF和CRLF</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// PHP 底层组装 User-Agent 的伪代码/部分逻辑</span><br><span class="hljs-keyword">if</span> (Z_TYPE_P(user_agent) == IS_STRING) &#123;<br>    smart_str_appendl(soap_headers, <span class="hljs-string">&quot;User-Agent: &quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;User-Agent: &quot;</span>)<span class="hljs-number">-1</span>);<br>    smart_str_appendl(soap_headers, Z_STRVAL_P(user_agent), Z_STRLEN_P(user_agent));<br>    smart_str_appendl(soap_headers, <span class="hljs-string">&quot;\r\n&quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;\r\n&quot;</span>)<span class="hljs-number">-1</span>);<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    smart_str_appendl(soap_headers, <span class="hljs-string">&quot;User-Agent: PHP-SOAP/&quot;</span> PHP_VERSION <span class="hljs-string">&quot;\r\n&quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;User-Agent: PHP-SOAP/&quot;</span> PHP_VERSION <span class="hljs-string">&quot;\r\n&quot;</span>)<span class="hljs-number">-1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>SplFileObject</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">fpassthru<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Pickle反序列化"><a href="#Pickle反序列化" class="headerlink" title="Pickle反序列化"></a>Pickle反序列化</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">http://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a><a class="post-meta__tags" href="/tags/HTTP/">HTTP</a><a class="post-meta__tags" href="/tags/%E7%BB%95%E8%BF%87/">绕过</a><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/SSRF/">SSRF</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">反序列化</a><a class="post-meta__tags" href="/tags/PHAR/">PHAR</a></div><div class="post-share"><div class="social-share" data-image="/img/black.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/03/notes/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">文件包含</div></div><div class="info-2"><div class="info-item-1">php伪协议 file:&#x2F;&#x2F;文件路径：例，  1.win：file:&#x2F;&#x2F;C:&#x2F;flag   2.file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd php:&#x2F;&#x2F;filter：例，php:&#x2F;...</div></div></div></a><a class="pagination-related" href="/2026/05/04/notes/Flask/" title="Flask"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Flask</div></div><div class="info-2"><div class="info-item-1">123456os.path.join()函数存在绝对路径拼接漏洞os.path.join(path,*paths)函数用于将多个文件路径连接成一个组合的路径。第一个函数通常包含了基础路径，而之后的每个参数被当作组件拼接到基础路径之后如果拼接的某个路径以 / 开头，那么包括基础路径在内的所有前缀...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/01/15/notes/http/" title="http"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-15</div><div class="info-item-2">http</div></div><div class="info-2"><div class="info-item-1">   遇到这种情况 试这些头    “Only localhost” X-Forwarded-For: 127.0.0.1   403 Forbidden X-Original-URL: &#x2F;admin   SSRF题目 Host: 127.0.0.1:8080   文件上传限制 Co...</div></div></div></a><a class="pagination-related" href="/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/" title="[NISACTF 2022]bingdundun~-phar文件上传-phar伪协议"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-16</div><div class="info-item-2">[NISACTF 2022]bingdundun~-phar文件上传-phar伪协议</div></div><div class="info-2"><div class="info-item-1"> 1.点过去，是一个文件上传页面  2.这里需要用到phar文件，phar是将多个php文件压缩起来的归档文件，相当于.jar和.zip 用于生成.phar文件的脚本 123456789&lt;?php$payload = &#x27;&lt;?php eval($_POST[&quot;pa...</div></div></div></a><a class="pagination-related" href="/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="文件上传"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-30</div><div class="info-item-2">文件上传</div></div><div class="info-2"><div class="info-item-1">如果一句话木马已经不好传了，可以尝试直接传php语句，执行命令 单语句可以不写分号，如：&lt;? system(‘ls’)?&gt; 一句话木马1&lt;?php @eval($_POST[&#x27;pass&#x27;]);?&gt;  1&lt;?= @eval($_POST[&#x2...</div></div></div></a><a class="pagination-related" href="/2026/04/16/wp/ciscn2026/MediaDrive/" title="MediaDrive"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-16</div><div class="info-item-2">MediaDrive</div></div><div class="info-2"><div class="info-item-1">攻击手法：漏洞点主要在preview.php 看源码 12345678910111213141516if (isset($_COOKIE[&#x27;user&#x27;])) &#123;    $user = @unserialize($_COOKIE[&#x27;user&#x27;])...</div></div></div></a><a class="pagination-related" href="/2026/05/03/notes/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-03</div><div class="info-item-2">文件包含</div></div><div class="info-2"><div class="info-item-1">php伪协议 file:&#x2F;&#x2F;文件路径：例，  1.win：file:&#x2F;&#x2F;C:&#x2F;flag   2.file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd php:&#x2F;&#x2F;filter：例，php:&#x2F;...</div></div></div></a><a class="pagination-related" href="/2026/04/25/notes/SSRF/" title="SSRF"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-25</div><div class="info-item-2">SSRF</div></div><div class="info-2"><div class="info-item-1">构造http请求时必须在每一句后面加上\r\n，结束时为\r\n\r\n，必须要空一行用于区分报文头和报文体 绕过ip绕过： 12345678910全以127.0.0.1为例长整型： 2130706433十六进制： 全十六进制：0x7f000001 点分：0x7f.0x00.0x00.0x01...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">CTF Web / Writeups / Security Notes</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">122</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><i class="fas fa-terminal"></i> root@lengkur:~$ share writeups && learn security</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">php反序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">魔术方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.</span> <span class="toc-text">绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">1.3.</span> <span class="toc-text">属性修饰符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wakeup%E7%BB%95%E8%BF%87%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">__wakeup绕过：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.5.</span> <span class="toc-text">phar反序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E7%B1%BB"><span class="toc-number">1.6.</span> <span class="toc-text">原生类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">Pickle反序列化</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" title="php命令执行">php命令执行</a><time datetime="2026-05-04T09:49:11.000Z" title="发表于 2026-05-04 17:49:11">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/Flask/" title="Flask">Flask</a><time datetime="2026-05-04T02:54:30.000Z" title="发表于 2026-05-04 10:54:30">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="php反序列化">php反序列化</a><time datetime="2026-05-04T02:12:32.000Z" title="发表于 2026-05-04 10:12:32">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/03/notes/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含">文件包含</a><time datetime="2026-05-03T12:41:39.000Z" title="发表于 2026-05-03 20:41:39">2026-05-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/02/notes/SQL/" title="SQL">SQL</a><time datetime="2026-05-02T13:36:28.000Z" title="发表于 2026-05-02 21:36:28">2026-05-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="/js/universe.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化,XXE,沙盒逃逸,内存马" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
