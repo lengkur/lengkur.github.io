@@ -4,16 +4,241 @@
   <url>
     <loc>https://lengkur.github.io/writeups/</loc>
     
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-06-24</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
+    <loc>https://lengkur.github.io/2026/01/20/wp/furryctf/%E5%9B%BA%E8%8B%A5%E9%87%91%E6%B1%A4-%E7%83%AD%E8%BA%AB%E9%A2%98-session%E4%BC%AA%E9%80%A0-flask-ssti/</loc>
     
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/30/wp/furryctf/admin-cookie%E4%BC%AA%E9%80%A0/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/20/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/only_real_revenge/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/30/wp/XMCTF/ezpollute/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/31/wp/XMCTF/ez_python/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/DXT/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/Broken%20Trust/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/31/wp/XMCTF/AutoPypy/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/31/wp/VNCTF/signin/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/ezUpload-.htaccess%E4%BE%A7%E4%BF%A1%E9%81%93%28%E7%8A%B6%E6%80%81%E7%A0%81%29/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/ezUpload%20Revenge%21%21-.htaccess%E4%BE%A7%E4%BF%A1%E9%81%93%28RewriteCond%29/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/27/wp/UniCTF/SecureDoc-xml/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/29/wp/UniCTF/Intrasight-SSRF-SSTI/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BWUSTCTF%202020%5D%E6%9C%B4%E5%AE%9E%E6%97%A0%E5%8D%8E-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-MD5%E5%BC%B1%E6%AF%94%E8%BE%83-intval%E7%89%B9%E6%80%A7-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dlevel-up~robots-md5%E5%BC%BA%E7%A2%B0%E6%92%9E-sha1%E5%BC%BA%E7%A2%B0%E6%92%9E-php%E5%8F%98%E9%87%8F%E8%A7%A3%E6%9E%90%E7%BB%95%E8%BF%87-create_function%E7%BB%95%E8%BF%87/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BMoeCTF%202021%5DbabyRCE/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/15/wp/NSSCTF%20WEB/%5BGKCTF%202021%5Deasycms/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/03/15/wp/NSSCTF%20WEB/%5BCISCN%202019%E5%8D%8E%E5%8C%97Day2%5DWeb1/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/06/wp/NCTF/N-RustPICA/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/06/wp/NCTF/N-Horse-SSTI%E7%9B%B2%E6%B3%A8/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/01/27/wp/LilacCTF%202026/keep-%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2-php7.4.21%E4%BB%A5%E4%B8%8B%E9%80%9A%E7%94%A8%E6%BC%8F%E6%B4%9E/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/06/09/wp/BUUCTF/%5BCISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day1%20Web2%5Dikun/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/05/04/notes/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -21,6 +246,15 @@
   
   <url>
     <loc>https://lengkur.github.io/2026/06/14/notes/java/</loc>
+    
+    <lastmod>2026-06-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
     
     <lastmod>2026-06-17</lastmod>
     
@@ -66,15 +300,6 @@
   
   <url>
     <loc>https://lengkur.github.io/2026/04/27/notes/php%E7%89%B9%E6%80%A7/</loc>
-    
-    <lastmod>2026-06-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/05/04/notes/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</loc>
     
     <lastmod>2026-06-09</lastmod>
     
@@ -300,33 +525,6 @@
   
   <url>
     <loc>https://lengkur.github.io/2026/01/16/wp/polarctf/%E7%AE%80%E5%8D%95-session%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/20/wp/furryctf/%E5%9B%BA%E8%8B%A5%E9%87%91%E6%B1%A4-%E7%83%AD%E8%BA%AB%E9%A2%98-session%E4%BC%AA%E9%80%A0-flask-ssti/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/30/wp/furryctf/admin-cookie%E4%BC%AA%E9%80%A0/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/20/wp/furryctf/DeepSleep-py2%E7%9A%84input-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87/</loc>
     
     <lastmod>2026-05-27</lastmod>
     
@@ -578,105 +776,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/only_real_revenge/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/30/wp/XMCTF/ezpollute/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/31/wp/XMCTF/ez_python/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/DXT/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/29/wp/XMCTF/Broken%20Trust/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/31/wp/XMCTF/AutoPypy/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/31/wp/VNCTF/signin/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/ezUpload-.htaccess%E4%BE%A7%E4%BF%A1%E9%81%93%28%E7%8A%B6%E6%80%81%E7%A0%81%29/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/ezUpload%20Revenge%21%21-.htaccess%E4%BE%A7%E4%BF%A1%E9%81%93%28RewriteCond%29/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/29/wp/UniCTF/Intrasight-SSRF-SSTI/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/27/wp/UniCTF/SecureDoc-xml/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/02/11/wp/SHCTF/%E4%BD%A0%E4%B9%9F%E6%87%82java/</loc>
     
     <lastmod>2026-05-27</lastmod>
@@ -839,15 +938,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BWUSTCTF%202020%5D%E6%9C%B4%E5%AE%9E%E6%97%A0%E5%8D%8E-%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-MD5%E5%BC%B1%E6%AF%94%E8%BE%83-intval%E7%89%B9%E6%80%A7-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BSWPUCTF%202022%20%E6%96%B0%E7%94%9F%E8%B5%9B%5Dez_sql-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87/</loc>
     
     <lastmod>2026-05-27</lastmod>
@@ -857,88 +947,7 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dlevel-up~robots-md5%E5%BC%BA%E7%A2%B0%E6%92%9E-sha1%E5%BC%BA%E7%A2%B0%E6%92%9E-php%E5%8F%98%E9%87%8F%E8%A7%A3%E6%9E%90%E7%BB%95%E8%BF%87-create_function%E7%BB%95%E8%BF%87/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BNISACTF%202022%5Dbingdundun~-phar%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-phar%E4%BC%AA%E5%8D%8F%E8%AE%AE/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/15/wp/NSSCTF%20WEB/%5BGKCTF%202021%5Deasycms/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BMoeCTF%202021%5DbabyRCE/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/16/wp/NSSCTF%20WEB/%5BDe1ctf%202019%5DSSRF%20Me-Flask/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/03/15/wp/NSSCTF%20WEB/%5BCISCN%202019%E5%8D%8E%E5%8C%97Day2%5DWeb1/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/04/06/wp/NCTF/N-RustPICA/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/04/07/wp/NCTF/N-MinSite/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/04/06/wp/NCTF/N-Horse-SSTI%E7%9B%B2%E6%B3%A8/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/01/27/wp/LilacCTF%202026/keep-%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2-php7.4.21%E4%BB%A5%E4%B8%8B%E9%80%9A%E7%94%A8%E6%BC%8F%E6%B4%9E/</loc>
     
     <lastmod>2026-05-27</lastmod>
     
@@ -1136,15 +1145,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/01/06/notes/Struct2/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/04/25/notes/SSRF/</loc>
     
     <lastmod>2026-05-27</lastmod>
@@ -1226,15 +1226,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/04/12/notes/%E6%8A%A5%E5%91%8A/</loc>
-    
-    <lastmod>2026-05-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/notes/</loc>
     
     <lastmod>2026-05-04</lastmod>
@@ -1300,7 +1291,7 @@
 
   <url>
     <loc>https://lengkur.github.io/</loc>
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
