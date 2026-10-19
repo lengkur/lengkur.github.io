@@ -2,6 +2,96 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lengkur.github.io/writeups/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/notes/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/09/08/wp/NSSCTF%20WEB/%5BCISCN%202019%E5%8D%8E%E4%B8%9C%E5%8D%97%5DWeb4/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/05/14/notes/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/27/notes/php%E7%89%B9%E6%80%A7/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/09/02/notes/XXE/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/04/25/notes/SSRF/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lengkur.github.io/2026/05/04/notes/Flask/</loc>
+    
+    <lastmod>2026-10-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/ezUpload/</loc>
     
     <lastmod>2026-09-01</lastmod>
@@ -39,24 +129,6 @@
   
   <url>
     <loc>https://lengkur.github.io/2026/01/28/wp/UniCTF/GlyphWeaver/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/writeups/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/notes/</loc>
     
     <lastmod>2026-09-01</lastmod>
     
@@ -731,24 +803,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/05/04/notes/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/05/14/notes/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/05/01/notes/%E5%86%85%E5%AD%98%E9%A9%AC/</loc>
     
     <lastmod>2026-09-01</lastmod>
@@ -830,15 +884,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/04/30/notes/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
-    
-    <lastmod>2026-06-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/06/09/wp/BUUCTF/%5B%E5%BC%BA%E7%BD%91%E6%9D%AF%202019%5D%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2/</loc>
     
     <lastmod>2026-06-09</lastmod>
@@ -849,15 +894,6 @@
   
   <url>
     <loc>https://lengkur.github.io/2026/06/01/wp/BUUCTF/%5B0CTF%202016%5Dpiapiapia/</loc>
-    
-    <lastmod>2026-06-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lengkur.github.io/2026/04/27/notes/php%E7%89%B9%E6%80%A7/</loc>
     
     <lastmod>2026-06-09</lastmod>
     
@@ -1163,15 +1199,6 @@
   </url>
   
   <url>
-    <loc>https://lengkur.github.io/2026/04/25/notes/SSRF/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lengkur.github.io/2026/04/26/notes/Nodejs/</loc>
     
     <lastmod>2026-05-27</lastmod>
@@ -1189,19 +1216,10 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://lengkur.github.io/2026/05/04/notes/Flask/</loc>
-    
-    <lastmod>2026-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://lengkur.github.io/</loc>
-    <lastmod>2026-09-01</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
